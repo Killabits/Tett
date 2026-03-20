@@ -4,581 +4,693 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DRAMASERVICE</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg: #0d0d1a;
-  --surface: #13131f;
-  --card: #1a1a2e;
-  --border: #2a2a4a;
-  --accent: #7c3aed;
-  --accent2: #a855f7;
-  --pink: #ec4899;
-  --cyan: #06b6d4;
-  --gold: #f59e0b;
-  --green: #10b981;
-  --orange: #f97316;
-  --red: #ef4444;
-  --text: #f1f0ff;
-  --subtext: #8b8bbb;
-  --muted: #3a3a5c;
+  --bg:        #080810;
+  --s1:        #0e0e1a;
+  --s2:        #13131f;
+  --s3:        #1c1c2e;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.12);
+  --text:      #f0f0f8;
+  --text2:     #9898b8;
+  --text3:     #55556a;
+  --accent:    #e63462;
+  --accent2:   #ff6b8a;
+  --blue:      #3b82f6;
+  --cyan:      #06b6d4;
+  --green:     #10b981;
+  --gold:      #f59e0b;
+  --purple:    #8b5cf6;
+  --r: 14px;
+  --r-sm: 8px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 400;
   min-height: 100vh;
   overflow-x: hidden;
-  text-transform: uppercase;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
+/* ── ATMOSPHERIC BG ── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(124,58,237,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(236,72,153,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 30% at 50% 50%, rgba(6,182,212,0.04) 0%, transparent 70%);
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(230,52,98,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 85% 100%, rgba(59,130,246,0.05) 0%, transparent 55%);
   pointer-events: none;
   z-index: 0;
 }
 
 /* ── HEADER ── */
 header {
-  position: relative;
-  z-index: 10;
-  padding: 28px 48px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,8,16,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  background: rgba(13,13,26,0.8);
-  backdrop-filter: blur(12px);
+  gap: 20px;
 }
 
-.logo-block { display: flex; align-items: center; gap: 14px; }
-
-.logo-icon {
-  width: 42px; height: 42px;
-  background: linear-gradient(135deg, var(--accent), var(--pink));
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 24px rgba(124,58,237,0.4);
-}
-.logo-icon svg { width: 22px; height: 22px; fill: white; }
-
-.logo-text { line-height: 1; }
-.logo-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  letter-spacing: 1px;
-  background: linear-gradient(90deg, #fff 0%, var(--accent2) 50%, var(--pink) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.logo-version {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--subtext);
-  letter-spacing: 2px;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
 }
 
-.header-right { display: flex; align-items: center; gap: 12px; }
-
-.refresh-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--subtext);
-  padding: 8px 18px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 1px;
-  cursor: pointer;
+.logo-mark {
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
-  transition: all 0.2s;
-  text-transform: uppercase;
-  display: flex; align-items: center; gap: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--s3);
+  border: 1px solid var(--border2);
 }
-.refresh-btn:hover { border-color: var(--accent2); color: var(--accent2); box-shadow: 0 0 12px rgba(168,85,247,0.2); }
-.refresh-btn.spinning svg { animation: spin 0.7s linear infinite; }
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.logo-mark-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent), #8b2fc9);
+}
+.logo-mark-fallback svg { width: 18px; height: 18px; fill: white; }
+
+.logo-text-block { line-height: 1; }
+.logo-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.logo-name span { color: var(--accent); }
+.logo-by {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pill-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: var(--text3);
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 2.5s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border2);
+  background: var(--s2);
+  color: var(--text2);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--s3); color: var(--text); border-color: var(--border2); }
+.btn svg { transition: transform 0.5s ease; }
+.btn.spinning svg { animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.last-updated {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
 }
-
-.live-dot {
-  display: inline-block;
-  width: 6px; height: 6px;
-  background: var(--green);
-  border-radius: 50%;
-  margin-right: 6px;
-  animation: pulse 2s ease infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.6)} }
+.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
 
 /* ── MAIN ── */
 main {
   position: relative;
   z-index: 1;
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 36px 48px;
+  padding: 32px 40px 80px;
 }
 
-/* ── TABS ── */
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 32px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 4px;
-  width: fit-content;
-}
-
-.tab-btn {
-  background: transparent;
-  border: none;
-  color: var(--subtext);
-  padding: 10px 24px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 9px;
-  transition: all 0.2s;
-  letter-spacing: 0.3px;
-}
-.tab-btn.active {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: white;
-  box-shadow: 0 4px 16px rgba(124,58,237,0.35);
-}
-.tab-btn:not(.active):hover { color: var(--text); background: var(--muted); }
-
-/* ── SUMMARY BAR ── */
-.summary-bar {
+/* ── STATS STRIP ── */
+.stats-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 32px;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 28px;
 }
 
-.summary-cell {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+.strip-cell {
+  background: var(--s1);
   padding: 20px 24px;
   position: relative;
-  overflow: hidden;
-  transition: border-color 0.2s;
+  transition: background 0.15s;
 }
-.summary-cell::before {
+.strip-cell:hover { background: var(--s2); }
+.strip-cell::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--cell-color, var(--accent));
+  height: 1px;
+  background: var(--cell-accent, transparent);
+  opacity: 0.6;
 }
-.summary-cell:hover { border-color: var(--border); }
 
-.summary-cell-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 2px;
-  color: var(--subtext);
+.strip-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 1.5px;
+  color: var(--text3);
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
-.summary-cell-value {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.7rem;
+
+.strip-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
   font-weight: 600;
-  color: var(--cell-color, var(--text));
   line-height: 1;
+  color: var(--cell-accent, var(--text));
   letter-spacing: -0.5px;
 }
 
-/* ── ADD PANEL ── */
-.add-panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px 28px;
-  margin-bottom: 32px;
+/* ── NAV TABS ── */
+.nav-tabs {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
 }
 
-.add-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
+.nav-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text3);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
   letter-spacing: 2px;
-  color: var(--subtext);
   text-transform: uppercase;
-  flex-shrink: 0;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: -1px;
+}
+.nav-tab:hover { color: var(--text2); }
+.nav-tab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+/* ── ADD ROW ── */
+.add-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .add-input {
   flex: 1;
-  min-width: 200px;
-  background: var(--card);
+  min-width: 220px;
+  height: 40px;
+  padding: 0 16px;
+  background: var(--s2);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 11px 16px;
+  border-radius: var(--r-sm);
   color: var(--text);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.83rem;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.add-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(168,85,247,0.1); }
-.add-input::placeholder { color: var(--muted); }
-
-.add-btn {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: white;
-  border: none;
-  padding: 11px 24px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.2s;
-  flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(124,58,237,0.3);
-}
-.add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,58,237,0.45); }
-.add-btn:active { transform: translateY(0); }
-
-/* ── SECTION HEADING ── */
-.section-heading {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  color: var(--subtext);
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  display: flex; align-items: center; gap: 12px;
-}
-.section-heading::after { content:''; flex:1; height:1px; background:var(--border); }
-
-/* ── RANKING TAB ── */
-#rankingView { display: none; }
-#channelsView { display: block; }
-
-/* ── LEADERBOARD ── */
-.leaderboard {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 40px;
+.add-input::placeholder { color: var(--text3); }
+.add-input:focus {
+  border-color: rgba(230,52,98,0.4);
+  box-shadow: 0 0 0 3px rgba(230,52,98,0.08);
 }
 
-.rank-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 18px 24px;
-  display: grid;
-  grid-template-columns: 52px 1fr auto;
-  align-items: center;
-  gap: 16px;
-  transition: all 0.25s;
-  animation: fadeUp 0.3s ease both;
-  position: relative;
-  overflow: hidden;
-}
-.rank-card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--rank-color, var(--accent));
-}
-.rank-card:hover { border-color: #3a3a5c; transform: translateX(3px); }
-
-.rank-card.rank-1 { background: linear-gradient(90deg, rgba(245,158,11,0.08), var(--surface)); border-color: rgba(245,158,11,0.3); }
-.rank-card.rank-2 { background: linear-gradient(90deg, rgba(148,163,184,0.06), var(--surface)); border-color: rgba(148,163,184,0.2); }
-.rank-card.rank-3 { background: linear-gradient(90deg, rgba(249,115,22,0.06), var(--surface)); border-color: rgba(249,115,22,0.2); }
-
-.rank-number {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1;
-}
-.rank-1 .rank-number { color: var(--gold); }
-.rank-2 .rank-number { color: #94a3b8; }
-.rank-3 .rank-number { color: var(--orange); }
-
-.rank-info { min-width: 0; }
-.rank-name {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 6px;
-}
-
-.rank-bars { display: flex; flex-direction: column; gap: 4px; }
-.rank-bar-row { display: flex; align-items: center; gap: 8px; }
-.rank-bar-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 1px;
-  color: var(--subtext);
-  text-transform: uppercase;
-  width: 70px;
-  flex-shrink: 0;
-}
-.rank-bar-track { flex: 1; height: 4px; background: var(--muted); border-radius: 2px; overflow: hidden; }
-.rank-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
-.rank-bar-val {
-  font-family: 'JetBrains Mono', monospace;
+/* ── SECTION LABEL ── */
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 0.6rem;
-  color: var(--subtext);
-  width: 40px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.rank-score-block { text-align: center; flex-shrink: 0; }
-.rank-score {
-  font-family: 'Outfit', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: -1px;
-  line-height: 1;
-  background: linear-gradient(135deg, var(--accent2), var(--pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.rank-score-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 1.5px;
-  color: var(--subtext);
+  letter-spacing: 2px;
+  color: var(--text3);
   text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
-/* Score breakdown pills */
-.score-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-.score-pill {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  padding: 2px 8px;
-  border-radius: 20px;
-  border: 1px solid;
-  letter-spacing: 0.5px;
-}
-
-/* ── CHANNEL CARDS GRID ── */
-.channels-grid {
+/* ── CHANNEL GRID ── */
+.channel-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 12px;
 }
 
-.channel-card {
-  background: var(--card);
+/* ── CHANNEL CARD ── */
+.ch-card {
+  background: var(--s1);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--r);
   overflow: hidden;
-  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-  animation: fadeUp 0.4s ease both;
-  position: relative;
+  transition: border-color 0.2s, transform 0.2s;
+  animation: fadeUp 0.35s ease both;
 }
-@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-.channel-card:hover { border-color: #3a3a5c; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ch-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-1px);
+}
 
-.card-accent-bar { height: 3px; width: 100%; }
+.ch-card-top-bar {
+  height: 2px;
+  width: 100%;
+}
 
-.card-header {
-  padding: 18px 20px 14px;
-  display: flex; align-items: center; justify-content: space-between;
+.ch-card-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid var(--border);
 }
 
-.channel-identity { display: flex; align-items: center; gap: 12px; }
-.channel-avatar {
-  width: 38px; height: 38px;
+.ch-identity { display: flex; align-items: center; gap: 10px; }
+
+.ch-avatar {
+  width: 34px; height: 34px;
   border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: white;
+  object-fit: cover;
   flex-shrink: 0;
-}
-.channel-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
-.channel-status {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--subtext);
-  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
   letter-spacing: 0.5px;
 }
 
-.card-actions { display: flex; gap: 6px; }
+.ch-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.2px;
+  color: var(--text);
+}
+.ch-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
 .icon-btn {
-  background: transparent;
+  width: 26px; height: 26px;
+  border-radius: 5px;
   border: 1px solid var(--border);
-  color: var(--muted);
-  width: 28px; height: 28px;
-  border-radius: 6px;
+  background: transparent;
+  color: var(--text3);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
+  flex-shrink: 0;
 }
-.icon-btn:hover { border-color: var(--red); color: var(--red); }
-.icon-btn svg { width: 12px; height: 12px; }
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(230,52,98,0.06); }
+.icon-btn svg { width: 11px; height: 11px; }
 
-.card-stats {
+/* ── STAT GRID ── */
+.ch-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
   background: var(--border);
 }
-.stat-cell {
-  background: var(--card);
-  padding: 16px 20px;
-}
-.stat-cell.full { grid-column: 1/-1; }
 
-.stat-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 1.5px;
-  color: var(--subtext);
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  display: flex; align-items: center; gap: 5px;
+.stat {
+  background: var(--s1);
+  padding: 14px 16px;
 }
-.stat-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
-.stat-value {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
+.stat.wide { grid-column: 1 / -1; }
+
+.stat-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.stat-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.55rem;
   font-weight: 600;
   line-height: 1;
   color: var(--text);
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
 }
+
 .stat-sub {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--text3);
   margin-top: 3px;
+  letter-spacing: 0.5px;
 }
 
-.ratio-bar-track { height: 3px; background: var(--muted); border-radius: 2px; margin-top: 8px; overflow: hidden; }
-.ratio-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+/* Ratio bar */
+.ratio-track {
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.ratio-fill {
+  height: 100%;
+  border-radius: 1px;
+  transition: width 0.7s cubic-bezier(0.16,1,0.3,1);
+}
 
-/* Score chip on card */
-.card-score-chip {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px;
+/* Score chip */
+.score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
   border-top: 1px solid var(--border);
-  background: rgba(124,58,237,0.05);
+  background: var(--s2);
 }
-.chip-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
+.score-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
   letter-spacing: 1.5px;
-  color: var(--subtext);
+  color: var(--text3);
   text-transform: uppercase;
 }
-.chip-score {
-  font-family: 'Outfit', sans-serif;
+.score-val {
+  font-family: 'Barlow Condensed', sans-serif;
   font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  background: linear-gradient(90deg, var(--accent2), var(--pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--accent2);
 }
 
 /* Sparkline */
-.sparkline-wrap { padding: 12px 20px 16px; border-top: 1px solid var(--border); }
-.sparkline-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
+.spark-wrap {
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--border);
+}
+.spark-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
   letter-spacing: 1.5px;
-  color: var(--subtext);
+  color: var(--text3);
   text-transform: uppercase;
   margin-bottom: 8px;
 }
-.sparkline-svg { width: 100%; height: 40px; overflow: visible; }
+.spark-svg { width: 100%; height: 38px; overflow: visible; display: block; }
 
-/* Empty state */
-.empty-state {
-  grid-column: 1/-1;
+/* Loading card */
+.loading-shimmer {
+  padding: 32px 16px;
   text-align: center;
-  padding: 70px 40px;
-  border: 2px dashed var(--border);
-  border-radius: 14px;
-  color: var(--muted);
 }
-.empty-state svg { width: 44px; height: 44px; margin-bottom: 14px; opacity: 0.3; }
-.empty-state p { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; line-height: 1.8; }
+.shimmer-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 2px;
+  animation: shimmer 1.2s ease infinite;
+}
+@keyframes shimmer {
+  0%,100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+.shimmer-dot:nth-child(2) { animation-delay: 0.15s; }
+.shimmer-dot:nth-child(3) { animation-delay: 0.3s; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+/* ── EMPTY STATE ── */
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 64px 32px;
+  border: 1px dashed var(--border);
+  border-radius: var(--r);
+  text-align: center;
+  color: var(--text3);
+}
+.empty-state svg { width: 40px; height: 40px; margin-bottom: 12px; opacity: 0.25; display: block; margin-left: auto; margin-right: auto; }
+.empty-state p {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 2;
+}
 
-@media (max-width: 768px) {
-  header { padding: 18px 20px; }
-  main { padding: 20px 16px; }
-  .channels-grid { grid-template-columns: 1fr; }
-  .rank-card { grid-template-columns: 40px 1fr auto; gap: 12px; }
-  .summary-bar { grid-template-columns: 1fr 1fr; }
-  .logo-title { font-size: 1.3rem; }
-  .rank-card { grid-template-columns: 40px 1fr auto; gap: 12px; }
+/* ── RANKING ── */
+#rankingView { display: none; }
+
+.rank-list { display: flex; flex-direction: column; gap: 8px; }
+
+.rank-item {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  display: grid;
+  grid-template-columns: 48px 1fr 80px;
+  align-items: center;
+  overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s;
+  animation: fadeUp 0.3s ease both;
+  position: relative;
+}
+.rank-item:hover { border-color: var(--border2); transform: translateX(2px); }
+
+.rank-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--rank-color, var(--border2));
+}
+
+.rank-num-col {
+  padding: 20px 0;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+.rank-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text3);
+  line-height: 1;
+}
+.rank-item:nth-child(1) .rank-num { color: var(--gold); }
+.rank-item:nth-child(2) .rank-num { color: #94a3b8; }
+.rank-item:nth-child(3) .rank-num { color: #cd7f32; }
+
+.rank-body { padding: 16px 20px; }
+
+.rank-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.rank-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: #fff;
+}
+.rank-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.metric-rows { display: flex; flex-direction: column; gap: 5px; }
+.metric-row { display: flex; align-items: center; gap: 10px; }
+.metric-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 1px;
+  color: var(--text3);
+  text-transform: uppercase;
+  width: 72px;
+  flex-shrink: 0;
+}
+.metric-track { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.metric-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+.metric-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--text2);
+  width: 42px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.rank-pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+.rank-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.5px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: var(--text3);
+}
+.rank-pill.pos { color: var(--green); border-color: rgba(16,185,129,0.2); background: rgba(16,185,129,0.05); }
+
+.rank-score-col {
+  padding: 20px 16px;
+  text-align: center;
+  border-left: 1px solid var(--border);
+}
+.rank-score-big {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+.rank-score-max {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5rem;
+  color: var(--text3);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+  header { padding: 0 16px; }
+  main { padding: 20px 16px 60px; }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .channel-grid { grid-template-columns: 1fr; }
+  .rank-item { grid-template-columns: 40px 1fr 64px; }
+  .strip-value { font-size: 1.5rem; }
+  .logo-name { font-size: 1rem; }
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-block">
-    <div class="logo-icon" id="logoIconWrap">
-      <img id="logoImg" src="" alt="" style="width:42px;height:42px;border-radius:12px;object-fit:cover;display:none">
-      <svg id="logoSvg" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+  <a class="logo" href="#">
+    <div class="logo-mark">
+      <img id="logoImg" src="https://i.imgur.com/rXa2aEV.jpg" alt="Logo" onload="this.style.display='block';this.parentElement.querySelector('.logo-mark-fallback').style.display='none'" onerror="this.style.display='none'">
+      <div class="logo-mark-fallback">
+        <svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+      </div>
     </div>
-    <div class="logo-text">
-      <div class="logo-title">DRAMASERVICE</div>
-      <div class="logo-version">BY PILSNERBRITT</div>
+    <div class="logo-text-block">
+      <div class="logo-name">DRAMA<span>SERVICE</span></div>
+      <div class="logo-by">BY PILSNERBRITT</div>
     </div>
-  </div>
+  </a>
   <div class="header-right">
-    <span class="last-updated" id="lastUpdated"><span class="live-dot"></span>SIMULERAD DATA</span>
-    <button class="refresh-btn" id="refreshBtn" onclick="refreshAll()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+    <div class="pill-badge">
+      <span class="live-dot"></span>
+      <span id="lastUpdated">LIVE</span>
+    </div>
+    <button class="btn" id="refreshBtn" onclick="refreshAll()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M23 4v6h-6M1 20v-6h6"/>
         <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
       </svg>
@@ -588,66 +700,68 @@ main {
 </header>
 
 <main>
-  <!-- Summary -->
-  <div class="summary-bar">
-    <div class="summary-cell" style="--cell-color: var(--accent2)">
-      <div class="summary-cell-label">Kanaler Spårade</div>
-      <div class="summary-cell-value" id="sumChannels">0</div>
+
+  <!-- Stats strip -->
+  <div class="stats-strip">
+    <div class="strip-cell" style="--cell-accent: var(--accent)">
+      <div class="strip-label">Kanaler</div>
+      <div class="strip-value" id="sumChannels">0</div>
     </div>
-    <div class="summary-cell" style="--cell-color: var(--gold)">
-      <div class="summary-cell-label">Totala Prenumeranter</div>
-      <div class="summary-cell-value" id="sumSubs">—</div>
+    <div class="strip-cell" style="--cell-accent: var(--gold)">
+      <div class="strip-label">Prenumeranter</div>
+      <div class="strip-value" id="sumSubs">—</div>
     </div>
-    <div class="summary-cell" style="--cell-color: var(--cyan)">
-      <div class="summary-cell-label">Visningar (senaste vids)</div>
-      <div class="summary-cell-value" id="sumViews">—</div>
+    <div class="strip-cell" style="--cell-accent: var(--cyan)">
+      <div class="strip-label">Visningar</div>
+      <div class="strip-value" id="sumViews">—</div>
     </div>
-    <div class="summary-cell" style="--cell-color: var(--green)">
-      <div class="summary-cell-label">Genomsnittlig Engagemang</div>
-      <div class="summary-cell-value" id="sumEngagement">—</div>
+    <div class="strip-cell" style="--cell-accent: var(--green)">
+      <div class="strip-label">Engagemang</div>
+      <div class="strip-value" id="sumEngagement">—</div>
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('channels')">📺 Kanaler</button>
-    <button class="tab-btn" onclick="switchTab('ranking')">🏆 Ranking</button>
-  </div>
+  <!-- Nav tabs -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('channels')">Kanaler</button>
+    <button class="nav-tab" onclick="switchTab('ranking')">Ranking</button>
+  </nav>
 
-  <!-- Channels View -->
+  <!-- Channels view -->
   <div id="channelsView">
-    <div class="add-panel">
-      <span class="add-label">+ Lägg till</span>
-      <input class="add-input" id="channelInput" type="text" placeholder="Kanalnamn eller @handle (t.ex. @MrBeast)" />
-      <button class="add-btn" onclick="addChannel()">Spåra Kanal</button>
+    <div class="add-row">
+      <input class="add-input" id="channelInput" type="text" placeholder="Kanalnamn eller @handle — t.ex. @MrBeast" />
+      <button class="btn btn-primary" onclick="addChannel()">Spåra kanal</button>
     </div>
-    <div class="section-heading">Spårade Kanaler</div>
-    <div class="channels-grid" id="channelsGrid">
+    <div class="section-label">Spårade kanaler</div>
+    <div class="channel-grid" id="channelsGrid">
       <div class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
           <rect x="2" y="3" width="20" height="14" rx="2"/>
           <path d="M8 21h8M12 17v4"/>
         </svg>
-        <p>INGA KANALER SPÅRAS ÄNNU<br>LÄGG TILL EN KANAL OVAN FÖR ATT BÖRJA</p>
+        <p>Inga kanaler spåras ännu<br>Lägg till en kanal ovan</p>
       </div>
     </div>
   </div>
 
-  <!-- Ranking View -->
+  <!-- Ranking view -->
   <div id="rankingView">
-    <div class="section-heading">Engagemangsranking</div>
-    <div class="leaderboard" id="leaderboard">
-      <div class="empty-state" style="border-radius:12px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <div class="section-label">Engagemangsranking</div>
+    <div class="rank-list" id="leaderboard">
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
           <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
         </svg>
-        <p>LÄGG TILL MINST 2 KANALER<br>FÖR ATT SE RANKING</p>
+        <p>Lägg till minst 2 kanaler<br>för att se ranking</p>
       </div>
     </div>
   </div>
+
 </main>
 
 <script>
+
 // ─── Config ───────────────────────────────────────────────────────────────────
 const YT_API_KEY = 'AIzaSyAVOaSXrASWP64P_13DpRVCgmhwbT_crJE';
 
@@ -667,56 +781,66 @@ let paletteIndex = 0;
 let currentTab = 'channels';
 
 // ─── Scoring System ───────────────────────────────────────────────────────────
-// All metrics are ratios relative to subscribers so small channels compete fairly
-// Max 100 points total, scored relative to the group
-
-function computeScore(ch) {
-  if (!ch.liveData || !ch.isReal) return null;
-  const d = ch.liveData;
-  const subs = d.subs || 1;
-  const views = d.totalViews10d || 0;
-  const likes = d.recentLikes || 0;
-  const videos = d.viewHistory.filter(v => v > 0).length || 1;
-
-  // Raw ratios (not yet normalized)
-  return {
-    viewRate: views / subs,           // views per sub (30pts)
-    likeRate: views > 0 ? likes / views : 0, // likes per view (35pts)
-    consistency: videos / 10,         // how many of 10 slots have content (20pts)
-    avgViews: views / videos,         // avg views per video (15pts)
-    raw: { views, likes, subs, videos }
-  };
-}
+// Points based on ABSOLUTE thresholds, not relative to group.
+// This way scores are meaningful and consistent regardless of who is in the group.
+//
+// VISN/SUB RATIO (30p)  — views / subscribers. Good = 0.5+ (half your subs watched)
+// GILLNINGSGRAD (35p)   — likes / views. Good = 5%+ like rate
+// AKTIVITET (20p)       — videos posted (out of 10 fetched slots with >0 views)
+// SNITTVISN/VIDEO (15p) — avg views per video relative to subscriber count
 
 function calculateRankings() {
   const scored = channels.filter(c => c.liveData && c.isReal && !c.loading);
   if (scored.length < 1) return [];
 
-  // Get raw scores
-  const rawScores = scored.map(ch => ({ ch, metrics: computeScore(ch) })).filter(x => x.metrics);
+  return scored.map(ch => {
+    const d = ch.liveData;
+    const subs = Math.max(d.subs, 1);
+    const views = d.totalViews10d || 0;
+    const likes = d.recentLikes || 0;
+    const activeVideos = d.viewHistory.filter(v => v > 0).length;
+    const avgViews = activeVideos > 0 ? views / activeVideos : 0;
 
-  // Normalize each metric relative to group max
-  const maxViewRate    = Math.max(...rawScores.map(x => x.metrics.viewRate), 0.0001);
-  const maxLikeRate    = Math.max(...rawScores.map(x => x.metrics.likeRate), 0.0001);
-  const maxConsistency = Math.max(...rawScores.map(x => x.metrics.consistency), 0.0001);
-  const maxAvgViews    = Math.max(...rawScores.map(x => x.metrics.avgViews), 0.0001);
+    // 1. View/Sub ratio — capped at 1.0 (100% of subs watched = max)
+    const viewSubRatio = Math.min(views / subs, 1.0);
+    const viewScore = Math.round(viewSubRatio * 30);
 
-  return rawScores.map(({ ch, metrics }) => {
-    const viewScore        = (metrics.viewRate / maxViewRate) * 30;
-    const likeScore        = (metrics.likeRate / maxLikeRate) * 35;
-    const consistencyScore = (metrics.consistency / maxConsistency) * 20;
-    const avgViewScore     = (metrics.avgViews / maxAvgViews) * 15;
-    const total = Math.round(viewScore + likeScore + consistencyScore + avgViewScore);
+    // 2. Like rate — capped at 10% (anything above 10% like rate = max)
+    const likeRate = views > 0 ? likes / views : 0;
+    const likeScore = Math.round(Math.min(likeRate / 0.10, 1.0) * 35);
+
+    // 3. Activity — how many of the 10 fetched videos have views (direct %)
+    const activityScore = Math.round((activeVideos / 10) * 20);
+
+    // 4. Avg views per video vs subscribers — capped at 50% of subs
+    const avgViewRatio = Math.min(avgViews / subs, 0.5) / 0.5;
+    const avgViewScore = Math.round(avgViewRatio * 15);
+
+    const total = viewScore + likeScore + activityScore + avgViewScore;
+
+    // Bar widths: show actual % of max possible for each metric
+    const bars = {
+      visnSub:   Math.round(viewSubRatio * 100),
+      gillRate:  Math.round(Math.min(likeRate / 0.10, 1.0) * 100),
+      aktivitet: Math.round((activeVideos / 10) * 100),
+    };
+
     return {
       ch,
       total,
+      bars,
       breakdown: {
-        visningar: Math.round(viewScore),
-        gilla: Math.round(likeScore),
-        aktivitet: Math.round(consistencyScore),
-        snittvisn: Math.round(avgViewScore),
+        visningar: viewScore,
+        gilla:     likeScore,
+        aktivitet: activityScore,
+        snittvisn: avgViewScore,
       },
-      metrics
+      details: {
+        viewSubRatioPct: (viewSubRatio * 100).toFixed(1),
+        likeRatePct:     (likeRate * 100).toFixed(2),
+        activeVideos,
+        avgViews: Math.round(avgViews),
+      }
     };
   }).sort((a, b) => b.total - a.total);
 }
@@ -796,40 +920,39 @@ function buildSparkline(data, color) {
 // ─── Card renderer ────────────────────────────────────────────────────────────
 function renderCard(ch) {
   const p = ch.palette;
+  const X = (id) => `<button class="icon-btn" onclick="removeChannel('${id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
 
-  if (ch.loading) return '<div class="channel-card" id="card-'+ch.id+'"><div class="card-accent-bar" style="background:'+p.bar+'"></div><div class="card-header"><div class="channel-identity"><div class="channel-avatar" style="background:'+p.avatar+'">'+getInitials(ch.name)+'</div><div><div class="channel-name">'+ch.name+'</div><div class="channel-status" style="color:'+p.bar+'">Hämtar data...</div></div></div></div><div style="padding:36px;text-align:center;font-family:JetBrains Mono,monospace;font-size:0.7rem;color:var(--subtext);letter-spacing:2px"><span class="live-dot" style="background:'+p.bar+'"></span>LADDAR...</div></div>';
+  if (ch.loading) return `<div class="ch-card" id="card-${ch.id}"><div class="ch-card-top-bar" style="background:${p.bar}"></div><div class="ch-card-header"><div class="ch-identity"><div class="ch-avatar" style="background:${p.avatar}">${getInitials(ch.name)}</div><div><div class="ch-name">${ch.name}</div><div class="ch-status" style="color:${p.bar}">Hämtar data...</div></div></div></div><div class="loading-shimmer"><span class="shimmer-dot" style="background:${p.bar}"></span><span class="shimmer-dot" style="background:${p.bar}"></span><span class="shimmer-dot" style="background:${p.bar}"></span></div></div>`;
 
-  if (ch.error && !ch.liveData) return '<div class="channel-card" id="card-'+ch.id+'"><div class="card-accent-bar" style="background:var(--red)"></div><div class="card-header"><div class="channel-identity"><div class="channel-avatar" style="background:#333">??</div><div><div class="channel-name">'+ch.name+'</div><div class="channel-status" style="color:var(--red)">FEL VID HÄMTNING</div></div></div><div class="card-actions"><button class="icon-btn" onclick="removeChannel(\''+ch.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div></div><div style="padding:20px;font-family:JetBrains Mono,monospace;font-size:0.7rem;color:var(--red);line-height:1.7">⚠ '+ch.error+'<br><span style="color:var(--muted)">Prova @handle-format.</span></div><div style="padding:0 20px 16px"><button onclick="retryChannel(\''+ch.id+'\')" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:7px 14px;font-family:JetBrains Mono,monospace;font-size:0.68rem;cursor:pointer;border-radius:6px">↺ Försök igen</button></div></div>';
+  if (ch.error && !ch.liveData) return `<div class="ch-card" id="card-${ch.id}"><div class="ch-card-top-bar" style="background:#ef4444"></div><div class="ch-card-header"><div class="ch-identity"><div class="ch-avatar" style="background:#333">??</div><div><div class="ch-name">${ch.name}</div><div class="ch-status" style="color:#ef4444">Fel vid hämtning</div></div></div>${X(ch.id)}</div><div style="padding:16px;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:#ef4444;line-height:1.8">⚠ ${ch.error}<br><span style="color:var(--text3)">Prova @handle-format</span></div><div style="padding:0 16px 14px"><button onclick="retryChannel('${ch.id}')" class="btn" style="height:28px;padding:0 12px;font-size:0.65rem">↺ Försök igen</button></div></div>`;
 
   const d = ch.liveData;
   const ratio = ((d.subs/(d.totalViews10d||1))*100).toFixed(1);
   const likeRate = d.totalViews10d > 0 ? ((d.recentLikes/d.totalViews10d)*100).toFixed(2) : '0.00';
   const ratioW = Math.min(parseFloat(ratio),100);
-  const statusLabel = ch.isReal ? 'LIVE · YOUTUBE API' : 'SIMULERAD DATA';
-  const statusColor = ch.isReal ? 'var(--green)' : 'var(--subtext)';
-  const avatarHtml = ch.avatarUrl ? '<img src="'+ch.avatarUrl+'" style="width:38px;height:38px;border-radius:50%;object-fit:cover">' : '<div class="channel-avatar" style="background:'+p.avatar+'">'+getInitials(ch.name)+'</div>';
-
-  // Score
+  const statusLabel = ch.isReal ? 'Live · YouTube API' : 'Simulerad data';
+  const statusColor = ch.isReal ? 'var(--green)' : 'var(--text3)';
+  const avatarHtml = ch.avatarUrl ? `<img src="${ch.avatarUrl}" class="ch-avatar" style="width:34px;height:34px" alt="">` : `<div class="ch-avatar" style="background:${p.avatar}">${getInitials(ch.name)}</div>`;
   const rankings = calculateRankings();
   const myRank = rankings.find(r => r.ch.id === ch.id);
-  const scoreHtml = myRank ? '<div class="card-score-chip"><span class="chip-label">Engagemangspoäng</span><span class="chip-score">'+myRank.total+'/100</span></div>' : '';
+  const scoreHtml = myRank ? `<div class="score-row"><span class="score-lbl">Engagemangspoäng</span><span class="score-val">${myRank.total} <span style="font-size:0.7rem;color:var(--text3);font-weight:400">/ 100</span></span></div>` : '';
 
-  return '<div class="channel-card" id="card-'+ch.id+'">'+
-    '<div class="card-accent-bar" style="background:linear-gradient(90deg,'+p.bar+',transparent)"></div>'+
-    '<div class="card-header">'+
-      '<div class="channel-identity">'+avatarHtml+'<div><div class="channel-name">'+ch.name+'</div><div class="channel-status" style="color:'+statusColor+'">'+statusLabel+'</div></div></div>'+
-      '<div class="card-actions"><button class="icon-btn" onclick="removeChannel(\''+ch.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'+
-    '</div>'+
-    '<div class="card-stats">'+
-      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:'+p.bar+'"></span>Prenumeranter</div><div class="stat-value" id="stat-subs-'+ch.id+'">'+fmt(d.subs)+'</div><div class="stat-sub">Totalt</div></div>'+
-      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:var(--pink)"></span>Gillningar</div><div class="stat-value" id="stat-likes-'+ch.id+'">'+fmt(d.recentLikes)+'</div><div class="stat-sub">Senaste 10 vids</div></div>'+
-      '<div class="stat-cell full"><div class="stat-label"><span class="stat-dot" style="color:var(--gold)"></span>Visningar — Senaste videor</div><div class="stat-value" id="stat-views-'+ch.id+'">'+fmt(d.totalViews10d)+'</div><div class="stat-sub">Summa av 10 senaste videos</div></div>'+
-      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:var(--cyan)"></span>Gillningsgrad</div><div class="stat-value" style="font-size:1.3rem;color:var(--cyan)" id="stat-lr-'+ch.id+'">'+likeRate+'%</div><div class="stat-sub">Gillningar / visningar</div></div>'+
-      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:'+p.bar+'"></span>Sub/Visn-ratio</div><div class="stat-value" style="font-size:1.3rem;color:'+p.bar+'" id="stat-ratio-'+ch.id+'">'+ratio+'%</div><div class="ratio-bar-track"><div class="ratio-bar-fill" id="ratio-bar-'+ch.id+'" style="width:'+ratioW+'%;background:'+p.bar+'"></div></div></div>'+
-    '</div>'+
-    scoreHtml+
-    '<div class="sparkline-wrap"><div class="sparkline-label">Videovisningar — trend</div><div id="spark-'+ch.id+'">'+buildSparkline(d.viewHistory, p.bar)+'</div></div>'+
-  '</div>';
+  return `<div class="ch-card" id="card-${ch.id}">
+    <div class="ch-card-top-bar" style="background:${p.bar}"></div>
+    <div class="ch-card-header">
+      <div class="ch-identity">${avatarHtml}<div><div class="ch-name">${ch.name}</div><div class="ch-status" style="color:${statusColor}">${statusLabel}</div></div></div>
+      ${X(ch.id)}
+    </div>
+    <div class="ch-stats">
+      <div class="stat"><div class="stat-lbl">Prenumeranter</div><div class="stat-num" id="stat-subs-${ch.id}">${fmt(d.subs)}</div></div>
+      <div class="stat"><div class="stat-lbl">Gillningar</div><div class="stat-num" id="stat-likes-${ch.id}">${fmt(d.recentLikes)}</div></div>
+      <div class="stat wide"><div class="stat-lbl">Visningar — senaste 10 videos</div><div class="stat-num" id="stat-views-${ch.id}">${fmt(d.totalViews10d)}</div></div>
+      <div class="stat"><div class="stat-lbl">Gillningsgrad</div><div class="stat-num" style="color:var(--cyan)" id="stat-lr-${ch.id}">${likeRate}%</div><div class="stat-sub">Gillningar / visningar</div></div>
+      <div class="stat"><div class="stat-lbl">Sub / Visn-ratio</div><div class="stat-num" style="color:${p.bar}" id="stat-ratio-${ch.id}">${ratio}%</div><div class="ratio-track"><div class="ratio-fill" id="ratio-bar-${ch.id}" style="width:${ratioW}%;background:${p.bar}"></div></div></div>
+    </div>
+    ${scoreHtml}
+    <div class="spark-wrap"><div class="spark-lbl">Videovisningar — trend</div><div id="spark-${ch.id}">${buildSparkline(d.viewHistory, p.bar)}</div></div>
+  </div>`;
 }
 
 // ─── Leaderboard renderer ─────────────────────────────────────────────────────
@@ -838,51 +961,44 @@ function renderLeaderboard() {
   const rankings = calculateRankings();
 
   if (rankings.length < 1) {
-    lb.innerHTML = '<div class="empty-state" style="border-radius:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><p>LÄGG TILL MINST 2 KANALER<br>FÖR ATT SE RANKING</p></div>';
+    lb.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><p>Lägg till minst 2 kanaler<br>för att se ranking</p></div>';
     return;
   }
 
-  const medals = ['🥇','🥈','🥉'];
-  const rankColors = ['var(--gold)','#94a3b8','var(--orange)'];
+  const rankNums = ['1','2','3'];
+  const rankColors = ['var(--gold)','#94a3b8','#cd7f32'];
 
   lb.innerHTML = rankings.map(function(r, i) {
-    const rankClass = i < 3 ? 'rank-'+(i+1) : '';
-    const color = rankColors[i] || 'var(--accent2)';
+    const color = rankColors[i] || 'var(--text3)';
     const p = r.ch.palette;
-    const d = r.ch.liveData;
+    const vW = r.bars.visnSub;
+    const lW = r.bars.gillRate;
+    const cW = r.bars.aktivitet;
+    const pillColors = {visningar:'var(--cyan)',gilla:'var(--accent2)',aktivitet:'var(--green)',snittvisn:'var(--gold)'};
+    const pillLabels = {visningar:'Visn',gilla:'Gilln',aktivitet:'Aktiv',snittvisn:'Snitt'};
+    const pills = Object.entries(r.breakdown).map(([k,v]) =>
+      `<span class="rank-pill${v>0?' pos':''}">${pillLabels[k]} +${v}p</span>`
+    ).join('');
+    const avatarHtml = r.ch.avatarUrl
+      ? `<img src="${r.ch.avatarUrl}" class="rank-avatar" style="background:${p.avatar}" alt="">`
+      : `<div class="rank-avatar" style="background:${p.avatar}">${getInitials(r.ch.name)}</div>`;
 
-    const maxViews = Math.max(...rankings.map(x=>x.metrics.viewRate));
-    const maxLikes = Math.max(...rankings.map(x=>x.metrics.likeRate));
-    const maxCons  = Math.max(...rankings.map(x=>x.metrics.consistency));
-
-    const vW = (r.metrics.viewRate/maxViews*100).toFixed(0);
-    const lW = (r.metrics.likeRate/maxLikes*100).toFixed(0);
-    const cW = (r.metrics.consistency/maxCons*100).toFixed(0);
-
-    const pillColors = {visningar:'var(--cyan)',gilla:'var(--pink)',aktivitet:'var(--green)',snittvisn:'var(--gold)'};
-    const pillLabels = {visningar:'Visningar','gilla':'Gillningar','aktivitet':'Aktivitet','snittvisn':'Snittvisn.'};
-    const pills = Object.entries(r.breakdown).map(function(kv) {
-      const k=kv[0],v=kv[1];
-      return '<span class="score-pill" style="color:'+pillColors[k]+';border-color:'+pillColors[k]+'33">'+pillLabels[k]+' +'+v+'</span>';
-    }).join('');
-
-    const avatarHtml = r.ch.avatarUrl ? '<img src="'+r.ch.avatarUrl+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover;margin-right:10px">' : '<div style="width:36px;height:36px;border-radius:50%;background:'+p.avatar+';display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;color:white;font-size:0.85rem;margin-right:10px;flex-shrink:0">'+getInitials(r.ch.name)+'</div>';
-
-    return '<div class="rank-card '+rankClass+'" style="--rank-color:'+p.bar+'">'+
-      '<div class="rank-number">'+(medals[i]||('#'+(i+1)))+'</div>'+
-      '<div class="rank-info">'+
-        '<div style="display:flex;align-items:center;margin-bottom:8px">'+avatarHtml+'<div class="rank-name">'+r.ch.name+'</div></div>'+
-        '<div class="rank-bars">'+
-          '<div class="rank-bar-row"><span class="rank-bar-label">Visn/sub</span><div class="rank-bar-track"><div class="rank-bar-fill" style="width:'+vW+'%;background:var(--cyan)"></div></div><span class="rank-bar-val">'+vW+'%</span></div>'+
-          '<div class="rank-bar-row"><span class="rank-bar-label">Gilln.grad</span><div class="rank-bar-track"><div class="rank-bar-fill" style="width:'+lW+'%;background:var(--pink)"></div></div><span class="rank-bar-val">'+lW+'%</span></div>'+
-          '<div class="rank-bar-row"><span class="rank-bar-label">Aktivitet</span><div class="rank-bar-track"><div class="rank-bar-fill" style="width:'+cW+'%;background:var(--green)"></div></div><span class="rank-bar-val">'+cW+'%</span></div>'+
-        '</div>'+
-        '<div class="score-pills">'+pills+'</div>'+
-      '</div>'+
-      '<div class="rank-score-block"><div class="rank-score">'+r.total+'</div><div class="rank-score-label">poäng</div></div>'+
-    '</div>';
+    return `<div class="rank-item" style="--rank-color:${p.bar}">
+      <div class="rank-num-col"><div class="rank-num" style="color:${color}">${rankNums[i] || (i+1)}</div></div>
+      <div class="rank-body">
+        <div class="rank-head">${avatarHtml}<span class="rank-name">${r.ch.name}</span></div>
+        <div class="metric-rows">
+          <div class="metric-row"><span class="metric-key">Visn/sub</span><div class="metric-track"><div class="metric-fill" style="width:${vW}%;background:var(--cyan)"></div></div><span class="metric-val">${r.details.viewSubRatioPct}%</span></div>
+          <div class="metric-row"><span class="metric-key">Gilln.grad</span><div class="metric-track"><div class="metric-fill" style="width:${lW}%;background:var(--accent2)"></div></div><span class="metric-val">${r.details.likeRatePct}%</span></div>
+          <div class="metric-row"><span class="metric-key">Aktivitet</span><div class="metric-track"><div class="metric-fill" style="width:${cW}%;background:var(--green)"></div></div><span class="metric-val">${r.details.activeVideos}/10</span></div>
+        </div>
+        <div class="rank-pills">${pills}</div>
+      </div>
+      <div class="rank-score-col"><div class="rank-score-big">${r.total}</div><div class="rank-score-max">/ 100</div></div>
+    </div>`;
   }).join('');
 }
+
 
 // ─── Core actions ─────────────────────────────────────────────────────────────
 async function addChannel() {
@@ -953,10 +1069,10 @@ function removeChannel(id) {
 function updateGrid() {
   const grid = document.getElementById('channelsGrid');
   if (channels.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><p>INGA KANALER SPÅRAS ÄNNU<br>LÄGG TILL EN KANAL OVAN FÖR ATT BÖRJA</p></div>';
+    grid.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><p>Inga kanaler spåras ännu<br>Lägg till en kanal ovan</p></div>';
     return;
   }
-  const existingIds = new Set([...grid.querySelectorAll('.channel-card')].map(el=>el.id.replace('card-','')));
+  const existingIds = new Set([...grid.querySelectorAll('.ch-card')].map(el=>el.id.replace('card-','')));
   const currentIds = new Set(channels.map(c=>c.id));
   existingIds.forEach(id=>{ if(!currentIds.has(id)){const el=document.getElementById('card-'+id);if(el)el.remove();} });
   channels.forEach(ch=>{ if(!existingIds.has(ch.id)){const div=document.createElement('div');div.innerHTML=renderCard(ch);grid.appendChild(div.firstElementChild);} });
@@ -1004,21 +1120,21 @@ async function refreshAll() {
       if(el('stat-views')) el('stat-views').textContent=fmt(s.totalViews10d);
       if(el('stat-lr')) el('stat-lr').textContent=lr+'%';
       if(el('stat-ratio')) el('stat-ratio').textContent=ratio+'%';
-      if(el('ratio-bar')) el('ratio-bar').style.width=Math.min(parseFloat(ratio),100)+'%';
+      const rb=document.getElementById('ratio-bar-'+ch.id); if(rb) rb.style.width=Math.min(parseFloat(ratio),100)+'%';
       if(el('spark')) el('spark').innerHTML=buildSparkline(s.viewHistory,ch.palette.bar);
     } catch(e){}
   }));
   updateSummary(); renderLeaderboard();
   btn.classList.remove('spinning');
   const now = new Date();
-  document.getElementById('lastUpdated').innerHTML = '<span class="live-dot"></span>UPPDATERAD '+now.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('lastUpdated').textContent = 'Uppdaterad '+now.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
 function switchTab(tab) {
   currentTab = tab;
   document.getElementById('channelsView').style.display = tab==='channels'?'block':'none';
   document.getElementById('rankingView').style.display = tab==='ranking'?'block':'none';
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(tab==='channels'&&i===0)||(tab==='ranking'&&i===1)));
+  document.querySelectorAll('.nav-tab').forEach((b,i)=>b.classList.toggle('active',(tab==='channels'&&i===0)||(tab==='ranking'&&i===1)));
   if (tab==='ranking') renderLeaderboard();
 }
 
@@ -1027,6 +1143,7 @@ setInterval(function(){if(channels.filter(c=>!c.loading).length>0)refreshAll();}
 
 // ─── Enter key ────────────────────────────────────────────────────────────────
 document.getElementById('channelInput').addEventListener('keydown',function(e){if(e.key==='Enter')addChannel();});
+
 </script>
 </body>
 </html>
