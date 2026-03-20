@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DRAMASERVICE</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0d0d1a;
@@ -29,10 +29,13 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body::before {
@@ -75,9 +78,10 @@ header {
 
 .logo-text { line-height: 1; }
 .logo-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.7rem;
-  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
   letter-spacing: 1px;
   background: linear-gradient(90deg, #fff 0%, var(--accent2) 50%, var(--pink) 100%);
   -webkit-background-clip: text;
@@ -153,7 +157,7 @@ main {
   border: none;
   color: var(--subtext);
   padding: 10px 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.82rem;
   font-weight: 500;
   cursor: pointer;
@@ -203,11 +207,12 @@ main {
   margin-bottom: 8px;
 }
 .summary-cell-value {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.9rem;
-  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 600;
   color: var(--cell-color, var(--text));
   line-height: 1;
+  letter-spacing: -0.5px;
 }
 
 /* ── ADD PANEL ── */
@@ -253,7 +258,7 @@ main {
   color: white;
   border: none;
   padding: 11px 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
@@ -317,9 +322,9 @@ main {
 .rank-card.rank-3 { background: linear-gradient(90deg, rgba(249,115,22,0.06), var(--surface)); border-color: rgba(249,115,22,0.2); }
 
 .rank-number {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
   text-align: center;
   line-height: 1;
 }
@@ -362,9 +367,10 @@ main {
 
 .rank-score-block { text-align: center; flex-shrink: 0; }
 .rank-score {
-  font-family: 'Syne', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -1px;
   line-height: 1;
   background: linear-gradient(135deg, var(--accent2), var(--pink));
   -webkit-background-clip: text;
@@ -422,7 +428,7 @@ main {
   width: 38px; height: 38px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.9rem;
   font-weight: 800;
   color: white;
@@ -474,11 +480,12 @@ main {
 }
 .stat-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 .stat-value {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
   line-height: 1;
   color: var(--text);
+  letter-spacing: -0.5px;
 }
 .stat-sub {
   font-family: 'JetBrains Mono', monospace;
@@ -505,9 +512,10 @@ main {
   text-transform: uppercase;
 }
 .chip-score {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
   background: linear-gradient(90deg, var(--accent2), var(--pink));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
