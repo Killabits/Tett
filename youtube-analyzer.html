@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DRAMASERVICE | Optimized</title>
+<title>DRAMASERVICE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* --- Behåller din exakta styling --- */
+/* --- Behåller din exakta original-styling --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #080810; --s1: #0e0e1a; --s2: #13131f; --s3: #1c1c2e;
@@ -17,76 +17,68 @@
   --cyan: #06b6d4; --green: #10b981; --gold: #f59e0b; --purple: #8b5cf6;
   --r: 14px; --r-sm: 8px;
 }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 60% 40% at 15% 0%, rgba(230,52,98,0.07) 0%, transparent 55%), radial-gradient(ellipse 50% 35% at 85% 100%, rgba(59,130,246,0.05) 0%, transparent 55%); pointer-events: none; z-index: 0; }
-header { position: sticky; top: 0; z-index: 100; background: rgba(8,8,16,0.85); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); padding: 0 40px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+header { position: sticky; top: 0; z-index: 100; background: rgba(8,8,16,0.85); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); padding: 0 40px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
 .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.logo-mark { width: 36px; height: 36px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: var(--s3); border: 1px solid var(--border2); }
-.logo-mark-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--accent), #8b2fc9); }
-.logo-mark-fallback svg { width: 18px; height: 18px; fill: white; }
-.logo-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text); }
+.logo-mark { width: 36px; height: 36px; border-radius: 8px; background: var(--s3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.logo-mark img { width: 100%; height: 100%; object-fit: cover; }
+.logo-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 3px; }
 .logo-name span { color: var(--accent); }
-.logo-by { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
-.pill-badge { display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--text3); text-transform: uppercase; }
-.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: blink 2.5s ease infinite; }
+.logo-by { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); letter-spacing: 2px; }
+.pill-badge { display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--text3); }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: blink 2.5s infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-.btn { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: var(--r-sm); border: 1px solid var(--border2); background: var(--s2); color: var(--text2); font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.18s ease; }
-.btn:hover { background: var(--s3); color: var(--text); }
+.btn { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: var(--r-sm); border: 1px solid var(--border2); background: var(--s2); color: var(--text2); font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 500; cursor: pointer; text-transform: uppercase; }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.spinning svg { animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-main { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 32px 40px 80px; }
+main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; position: relative; z-index: 1; }
 .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 28px; }
-.strip-cell { background: var(--s1); padding: 20px 24px; position: relative; }
-.strip-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; }
-.strip-value { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 600; line-height: 1; color: var(--cell-accent, var(--text)); }
+.strip-cell { background: var(--s1); padding: 20px; }
+.strip-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; color: var(--text3); text-transform: uppercase; margin-bottom: 8px; }
+.strip-value { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 600; color: var(--cell-accent, var(--text)); }
 .nav-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
-.nav-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--text3); font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; padding: 12px 20px; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; }
+.nav-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--text3); font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; padding: 12px 20px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; }
 .nav-tab.active { color: var(--text); border-bottom-color: var(--accent); }
 .add-row { display: flex; gap: 10px; margin-bottom: 24px; }
 .add-input { flex: 1; height: 40px; padding: 0 16px; background: var(--s2); border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--text); outline: none; }
-.section-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
-.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.channel-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.ch-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; animation: fadeUp 0.35s ease both; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-.ch-card-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.channel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ch-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: transform 0.2s; }
+.ch-card:hover { transform: translateY(-2px); border-color: var(--border2); }
+.ch-card-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 .ch-identity { display: flex; align-items: center; gap: 10px; }
-.ch-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--s3); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; }
-.ch-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
-.ch-status { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; text-transform: uppercase; }
+.ch-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--s3); }
+.ch-name { font-weight: 600; font-size: 0.9rem; }
+.ch-status { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--green); text-transform: uppercase; }
 .ch-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
 .stat { background: var(--s1); padding: 14px 16px; }
 .stat.wide { grid-column: 1 / -1; }
-.stat-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); text-transform: uppercase; margin-bottom: 6px; }
-.stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.55rem; font-weight: 600; color: var(--text); }
+.stat-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
+.stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 600; }
 .ratio-track { height: 2px; background: var(--border); margin-top: 8px; }
-.ratio-fill { height: 100%; transition: width 0.7s ease; }
-.score-row { display: flex; justify-content: space-between; padding: 10px 16px; border-top: 1px solid var(--border); background: var(--s2); }
+.ratio-fill { height: 100%; transition: width 0.8s; }
+.score-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--s2); border-top: 1px solid var(--border); }
+.score-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); text-transform: uppercase; }
 .score-val { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--accent2); }
-.spark-wrap { padding: 10px 16px 14px; border-top: 1px solid var(--border); }
-.spark-svg { width: 100%; height: 38px; display: block; }
-.empty-state { grid-column: 1 / -1; padding: 64px; text-align: center; color: var(--text3); border: 1px dashed var(--border); border-radius: var(--r); }
+.spark-wrap { padding: 12px 16px; border-top: 1px solid var(--border); }
+.spark-svg { width: 100%; height: 40px; }
+.empty-state { grid-column: 1 / -1; padding: 60px; text-align: center; border: 1px dashed var(--border); border-radius: var(--r); color: var(--text3); }
 #rankingView { display: none; }
 .rank-list { display: flex; flex-direction: column; gap: 8px; }
-.rank-item { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); display: grid; grid-template-columns: 48px 1fr 80px; align-items: center; overflow: hidden; }
-.rank-num-col { padding: 20px 0; text-align: center; border-right: 1px solid var(--border); font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; }
-.rank-body { padding: 16px 20px; }
-.metric-rows { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
-.metric-row { display: flex; align-items: center; gap: 10px; }
-.metric-track { flex: 1; height: 3px; background: var(--border); }
-.metric-fill { height: 100%; }
-.rank-score-col { padding: 20px 16px; text-align: center; border-left: 1px solid var(--border); }
-.rank-score-big { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 700; }
-@media (max-width: 700px) { .stats-strip { grid-template-columns: 1fr 1fr; } .channel-grid { grid-template-columns: 1fr; } }
+.rank-item { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); display: grid; grid-template-columns: 48px 1fr 80px; align-items: center; }
+.rank-num-col { text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; border-right: 1px solid var(--border); padding: 15px 0; }
+.rank-body { padding: 15px 20px; }
+.rank-score-col { border-left: 1px solid var(--border); text-align: center; padding: 15px 0; }
+.rank-score-big { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 700; }
+@media (max-width: 750px) { .channel-grid { grid-template-columns: 1fr; } .stats-strip { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
 
 <header>
   <a class="logo" href="#">
-    <div class="logo-mark"><div class="logo-mark-fallback"><svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg></div></div>
+    <div class="logo-mark"><img id="logoImg" src="https://i.imgur.com/rXa2aEV.jpg" alt="Logo"></div>
     <div class="logo-text-block">
       <div class="logo-name">DRAMA<span>SERVICE</span></div>
       <div class="logo-by">BY PILSNERBRITT</div>
@@ -117,22 +109,20 @@ main { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; paddin
   <div id="channelsView">
     <div class="add-row">
       <input class="add-input" id="channelInput" type="text" placeholder="Kanalnamn eller @handle" />
-      <button class="btn btn-primary" onclick="addChannel()">Spåra</button>
+      <button class="btn btn-primary" onclick="addChannel()">Spåra kanal</button>
     </div>
-    <div class="section-label">Spårade kanaler</div>
     <div class="channel-grid" id="channelsGrid"></div>
   </div>
 
   <div id="rankingView">
-    <div class="section-label">Engagemangsranking</div>
     <div class="rank-list" id="leaderboard"></div>
   </div>
 </main>
 
 <script>
-// --- CONFIG & CACHE SETTINGS ---
+// --- KONFIGURATION ---
 const YT_API_KEY = 'AIzaSyAVOaSXrASWP64P_13DpRVCgmhwbT_crJE';
-const CACHE_TIME = 30 * 60 * 1000; // 30 minuter
+const CACHE_MINS = 30;
 
 const PALETTES = [
   { bar: '#7c3aed', avatar: '#7c3aed' }, { bar: '#ec4899', avatar: '#ec4899' },
@@ -142,52 +132,46 @@ const PALETTES = [
 let channels = [];
 let paletteIndex = 0;
 
-// --- UTILS ---
+// --- FORMATERING ---
 const fmt = (n) => n >= 1000000 ? (n/1000000).toFixed(1) + 'M' : n >= 1000 ? (n/1000).toFixed(1) + 'K' : n.toLocaleString('sv-SE');
 const getInitials = (n) => n.replace('@','').slice(0,2).toUpperCase();
 
-// --- LOCAL STORAGE LOGIC ---
-function saveToLS() {
-  localStorage.setItem('ds_channels', JSON.stringify(channels.map(c => c.name)));
-}
-
-function getCache(handle) {
-  const c = localStorage.getItem('yt_cache_' + handle);
+// --- CACHE & STORAGE ---
+function saveChannels() { localStorage.setItem('ds_saved_channels', JSON.stringify(channels.map(c => c.name))); }
+function getCached(id) {
+  const c = localStorage.getItem('yt_cache_' + id);
   if (!c) return null;
   const { data, ts } = JSON.parse(c);
-  return (Date.now() - ts < CACHE_TIME) ? data : null;
+  return (Date.now() - ts < CACHE_MINS * 60 * 1000) ? data : null;
 }
+function setCached(id, data) { localStorage.setItem('yt_cache_' + id, JSON.stringify({ data, ts: Date.now() })); }
 
-function setCache(handle, data) {
-  localStorage.setItem('yt_cache_' + handle, JSON.stringify({ data, ts: Date.now() }));
-}
-
-// --- OPTIMIZED FETCH (Low Quota) ---
-async function fetchChannelData(handleOrId) {
-  const clean = handleOrId.startsWith('@') ? handleOrId : '@' + handleOrId;
-  const cached = getCache(clean);
+// --- API LOGIK (OPTIMERAD) ---
+async function fetchChannelData(handle) {
+  const clean = handle.startsWith('@') ? handle : '@' + handle;
+  const cached = getCached(clean);
   if (cached) return cached;
 
-  // 1. Get Channel ID & Uploads Playlist (1 unit)
-  let res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${encodeURIComponent(clean)}&key=${YT_API_KEY}`);
+  // 1. Kanalinfo (1 enhet)
+  let res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${encodeURIComponent(clean)}&key=${YT_API_KEY}&fields=items(id,snippet,statistics,contentDetails)`);
   let data = await res.json();
-
+  
   if (!data.items?.length) {
-    res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=${encodeURIComponent(handleOrId)}&key=${YT_API_KEY}`);
+    res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=${encodeURIComponent(handle)}&key=${YT_API_KEY}`);
     data = await res.json();
   }
-  if (!data.items?.length) throw new Error('Kanal ej hittad');
+  if (!data.items?.length) throw new Error('Kanal hittades inte');
 
   const ch = data.items[0];
   const uploadsId = ch.contentDetails.relatedPlaylists.uploads;
 
-  // 2. Get Video IDs (1 unit)
-  const pRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${uploadsId}&maxResults=10&key=${YT_API_KEY}`);
+  // 2. Senaste videor (1 enhet) - Mycket billigare än 'search'
+  const pRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${uploadsId}&maxResults=10&key=${YT_API_KEY}&fields=items/contentDetails/videoId`);
   const pData = await pRes.json();
   const vIds = pData.items.map(i => i.contentDetails.videoId).join(',');
 
-  // 3. Get Stats (1 unit)
-  const vRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${vIds}&key=${YT_API_KEY}`);
+  // 3. Videostatistik (1 enhet)
+  const vRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${vIds}&key=${YT_API_KEY}&fields=items(statistics)`);
   const vData = await vRes.json();
 
   const viewHistory = vData.items.map(v => parseInt(v.statistics.viewCount || 0));
@@ -195,70 +179,87 @@ async function fetchChannelData(handleOrId) {
     resolvedName: ch.snippet.title,
     avatarUrl: ch.snippet.thumbnails.default.url,
     subs: parseInt(ch.statistics.subscriberCount || 0),
-    totalViews10d: viewHistory.reduce((a, b) => a + b, 0),
-    recentLikes: vData.items.reduce((s, v) => s + parseInt(v.statistics.likeCount || 0), 0),
+    totalViews10d: viewHistory.reduce((a,b) => a+b, 0),
+    recentLikes: vData.items.reduce((s,v) => s + parseInt(v.statistics.likeCount || 0), 0),
     viewHistory,
     isReal: true
   };
 
-  setCache(clean, result);
+  setCached(clean, result);
   return result;
 }
 
-// --- CORE FUNCTIONS ---
+// --- CORE UI ---
 async function addChannel(nameFromLS = null) {
   const input = document.getElementById('channelInput');
   const val = nameFromLS || input.value.trim();
   if (!val) return;
 
-  const id = 'ch_' + Date.now() + Math.random().toString(36).substr(2,4);
+  const id = 'ch_' + Date.now();
   const ch = { id, name: val, palette: PALETTES[paletteIndex++ % PALETTES.length], loading: true };
   channels.push(ch);
-  if (!nameFromLS) { input.value = ''; saveToLS(); }
-  updateUI();
+  if (!nameFromLS) { input.value = ''; saveChannels(); }
+  renderGrid();
 
   try {
     const data = await fetchChannelData(val);
-    Object.assign(ch, { ...data, loading: false, error: null });
+    Object.assign(ch, { ...data, loading: false });
   } catch(e) {
     ch.loading = false; ch.error = e.message;
   }
-  updateUI();
+  renderGrid();
+  updateSummary();
 }
 
 function removeChannel(id) {
   channels = channels.filter(c => c.id !== id);
-  saveToLS();
-  updateUI();
-}
-
-function updateUI() {
-  const grid = document.getElementById('channelsGrid');
-  grid.innerHTML = channels.length ? channels.map(c => renderCard(c)).join('') : '<div class="empty-state">Inga kanaler spåras</div>';
+  saveChannels();
+  renderGrid();
   updateSummary();
-  renderLeaderboard();
 }
 
-function renderCard(ch) {
-  if (ch.loading) return `<div class="ch-card"><div style="padding:40px;text-align:center">Laddar...</div></div>`;
-  if (ch.error) return `<div class="ch-card"><div style="padding:20px;color:red">${ch.error} <button onclick="removeChannel('${ch.id}')">X</button></div></div>`;
-  
-  const lr = ((ch.recentLikes / (ch.totalViews10d || 1)) * 100).toFixed(2);
-  return `
-    <div class="ch-card">
-      <div class="ch-card-header">
-        <div class="ch-identity">
-          <img src="${ch.avatarUrl}" class="ch-avatar">
-          <div><div class="ch-name">${ch.resolvedName}</div><div class="ch-status">Aktiv</div></div>
+function renderGrid() {
+  const grid = document.getElementById('channelsGrid');
+  if (!channels.length) { grid.innerHTML = '<div class="empty-state">Inga kanaler spåras</div>'; return; }
+  grid.innerHTML = channels.map(c => {
+    if (c.loading) return `<div class="ch-card"><div style="padding:40px;text-align:center">Hämtar...</div></div>`;
+    if (c.error) return `<div class="ch-card"><div style="padding:20px;color:var(--accent)">${c.error} <button onclick="removeChannel('${c.id}')">X</button></div></div>`;
+    
+    const score = calculateScore(c);
+    const lr = ((c.recentLikes / (c.totalViews10d || 1)) * 100).toFixed(2);
+    const ratio = Math.min((c.totalViews10d / (c.subs || 1)) * 100, 100).toFixed(1);
+
+    return `
+      <div class="ch-card">
+        <div class="ch-card-header">
+          <div class="ch-identity">
+            <img src="${c.avatarUrl}" class="ch-avatar">
+            <div><div class="ch-name">${c.resolvedName}</div><div class="ch-status">LIVE</div></div>
+          </div>
+          <button class="btn" onclick="removeChannel('${c.id}')" style="height:24px;width:24px;padding:0;justify-content:center">×</button>
         </div>
-        <button onclick="removeChannel('${ch.id}')" class="btn">X</button>
-      </div>
-      <div class="ch-stats">
-        <div class="stat"><div class="stat-lbl">Subs</div><div class="stat-num">${fmt(ch.subs)}</div></div>
-        <div class="stat"><div class="stat-lbl">Visn (10 st)</div><div class="stat-num">${fmt(ch.totalViews10d)}</div></div>
-        <div class="stat wide"><div class="stat-lbl">Gillningsgrad</div><div class="stat-num">${lr}%</div></div>
-      </div>
-    </div>`;
+        <div class="ch-stats">
+          <div class="stat"><div class="stat-lbl">Subs</div><div class="stat-num">${fmt(c.subs)}</div></div>
+          <div class="stat"><div class="stat-lbl">Visningar (10st)</div><div class="stat-num">${fmt(c.totalViews10d)}</div></div>
+          <div class="stat"><div class="stat-lbl">Gillningsgrad</div><div class="stat-num" style="color:var(--cyan)">${lr}%</div></div>
+          <div class="stat"><div class="stat-lbl">Visn/Sub Ratio</div><div class="stat-num" style="color:${c.palette.bar}">${ratio}%</div><div class="ratio-track"><div class="ratio-fill" style="width:${ratio}%;background:${c.palette.bar}"></div></div></div>
+        </div>
+        <div class="score-row"><span class="score-lbl">Engagemangspoäng</span><span class="score-val">${score} / 100</span></div>
+        <div class="spark-wrap">${buildSparkline(c.viewHistory, c.palette.bar)}</div>
+      </div>`;
+  }).join('');
+}
+
+function calculateScore(c) {
+  const viewSub = Math.min(c.totalViews10d / (c.subs || 1), 1.0) * 40;
+  const likeRate = Math.min((c.recentLikes / (c.totalViews10d || 1)) / 0.1, 1.0) * 60;
+  return Math.round(viewSub + likeRate);
+}
+
+function buildSparkline(data, color) {
+  const max = Math.max(...data) || 1;
+  const pts = data.map((v, i) => `${(i/9)*100},${40 - (v/max)*35}`).join(' ');
+  return `<svg viewBox="0 0 100 40" class="spark-svg"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round"/></svg>`;
 }
 
 function updateSummary() {
@@ -270,37 +271,35 @@ function updateSummary() {
 }
 
 function switchTab(t) {
-  document.getElementById('channelsView').style.display = t === 'channels' ? 'block' : 'none';
-  document.getElementById('rankingView').style.display = t === 'ranking' ? 'block' : 'none';
-  document.querySelectorAll('.nav-tab').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(t.slice(0,3))));
+  document.getElementById('channelsView').style.display = t==='channels'?'block':'none';
+  document.getElementById('rankingView').style.display = t==='ranking'?'block':'none';
+  document.querySelectorAll('.nav-tab').forEach((b,i) => b.classList.toggle('active', (t==='channels'&&i===0)||(t==='ranking'&&i===1)));
+  if(t==='ranking') renderLeaderboard();
+}
+
+function renderLeaderboard() {
+  const lb = document.getElementById('leaderboard');
+  const sorted = [...channels].filter(c=>!c.loading && !c.error).sort((a,b) => calculateScore(b) - calculateScore(a));
+  lb.innerHTML = sorted.map((c, i) => `
+    <div class="rank-item">
+      <div class="rank-num-col">${i+1}</div>
+      <div class="rank-body"><div style="font-weight:600">${c.resolvedName}</div></div>
+      <div class="rank-score-col"><div class="rank-score-big">${calculateScore(c)}</div></div>
+    </div>
+  `).join('');
 }
 
 async function refreshAll() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
-  localStorage.clear(); // Töm cache för att tvinga ny hämtning
-  const tasks = channels.map(c => fetchChannelData(c.name).then(d => Object.assign(c, d)));
-  await Promise.all(tasks);
-  updateUI();
+  localStorage.clear(); // Tvinga ny hämtning
+  await Promise.all(channels.map(c => addChannel(c.name))); // Enkel refresh-logik
   btn.classList.remove('spinning');
-  document.getElementById('lastUpdated').textContent = 'Uppdaterad ' + new Date().toLocaleTimeString();
+  document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
 }
 
-function renderLeaderboard() {
-  const lb = document.getElementById('leaderboard');
-  const scored = channels.filter(c => !c.loading && !c.error).sort((a,b) => b.totalViews10d - a.totalViews10d);
-  lb.innerHTML = scored.map((c, i) => `
-    <div class="rank-item">
-      <div class="rank-num-col">${i+1}</div>
-      <div class="rank-body">${c.resolvedName}</div>
-      <div class="rank-score-col"><div class="rank-score-big">${fmt(c.totalViews10d)}</div></div>
-    </div>
-  `).join('');
-}
-
-// --- INIT ---
 window.onload = () => {
-  const saved = JSON.parse(localStorage.getItem('ds_channels') || '[]');
+  const saved = JSON.parse(localStorage.getItem('ds_saved_channels') || '[]');
   saved.forEach(n => addChannel(n));
 };
 </script>
