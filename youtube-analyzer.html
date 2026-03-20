@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* --- Behåller din exakta original-styling --- */
+/* --- Design & Layout --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #080810; --s1: #0e0e1a; --s2: #13131f; --s3: #1c1c2e;
@@ -26,11 +26,7 @@ header { position: sticky; top: 0; z-index: 100; background: rgba(8,8,16,0.85); 
 .logo-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 3px; }
 .logo-name span { color: var(--accent); }
 .logo-by { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); letter-spacing: 2px; }
-.pill-badge { display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--text3); }
-.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: blink 2.5s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 .btn { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: var(--r-sm); border: 1px solid var(--border2); background: var(--s2); color: var(--text2); font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 500; cursor: pointer; text-transform: uppercase; }
-.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.spinning svg { animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; position: relative; z-index: 1; }
@@ -41,11 +37,10 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; position: relative
 .nav-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
 .nav-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--text3); font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; padding: 12px 20px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; }
 .nav-tab.active { color: var(--text); border-bottom-color: var(--accent); }
-.add-row { display: flex; gap: 10px; margin-bottom: 24px; }
-.add-input { flex: 1; height: 40px; padding: 0 16px; background: var(--s2); border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--text); outline: none; }
+.section-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .channel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .ch-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: transform 0.2s; }
-.ch-card:hover { transform: translateY(-2px); border-color: var(--border2); }
 .ch-card-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 .ch-identity { display: flex; align-items: center; gap: 10px; }
 .ch-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--s3); }
@@ -53,255 +48,214 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; position: relative
 .ch-status { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--green); text-transform: uppercase; }
 .ch-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
 .stat { background: var(--s1); padding: 14px 16px; }
-.stat.wide { grid-column: 1 / -1; }
 .stat-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
 .stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 600; }
-.ratio-track { height: 2px; background: var(--border); margin-top: 8px; }
-.ratio-fill { height: 100%; transition: width 0.8s; }
 .score-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--s2); border-top: 1px solid var(--border); }
-.score-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--text3); text-transform: uppercase; }
 .score-val { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--accent2); }
 .spark-wrap { padding: 12px 16px; border-top: 1px solid var(--border); }
-.spark-svg { width: 100%; height: 40px; }
-.empty-state { grid-column: 1 / -1; padding: 60px; text-align: center; border: 1px dashed var(--border); border-radius: var(--r); color: var(--text3); }
+.spark-svg { width: 100%; height: 40px; stroke-width: 2; fill: none; }
 #rankingView { display: none; }
-.rank-list { display: flex; flex-direction: column; gap: 8px; }
-.rank-item { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); display: grid; grid-template-columns: 48px 1fr 80px; align-items: center; }
-.rank-num-col { text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; border-right: 1px solid var(--border); padding: 15px 0; }
-.rank-body { padding: 15px 20px; }
+.rank-item { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); display: grid; grid-template-columns: 48px 1fr 120px; align-items: center; margin-bottom: 8px; }
+.rank-num-col { text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; border-right: 1px solid var(--border); padding: 15px 0; color: var(--text3); }
+.rank-body { padding: 15px 20px; font-weight: 600; }
 .rank-score-col { border-left: 1px solid var(--border); text-align: center; padding: 15px 0; }
-.rank-score-big { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 700; }
+.rank-score-big { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--accent2); }
 @media (max-width: 750px) { .channel-grid { grid-template-columns: 1fr; } .stats-strip { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
 
 <header>
-  <a class="logo" href="#">
-    <div class="logo-mark"><img id="logoImg" src="https://i.imgur.com/rXa2aEV.jpg" alt="Logo"></div>
+  <div class="logo">
+    <div class="logo-mark"><img src="https://i.imgur.com/rXa2aEV.jpg" alt="Logo"></div>
     <div class="logo-text-block">
       <div class="logo-name">DRAMA<span>SERVICE</span></div>
       <div class="logo-by">BY PILSNERBRITT</div>
     </div>
-  </a>
+  </div>
   <div class="header-right">
-    <div class="pill-badge"><span class="live-dot"></span><span id="lastUpdated">LIVE</span></div>
+    <div class="pill-badge"><span class="live-dot"></span><span id="lastUpdated">LIVE MONITOR</span></div>
     <button class="btn" id="refreshBtn" onclick="refreshAll()">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-      Uppdatera
+      Refresh
     </button>
   </div>
 </header>
 
 <main>
   <div class="stats-strip">
-    <div class="strip-cell" style="--cell-accent: var(--accent)"><div class="strip-label">Kanaler</div><div class="strip-value" id="sumChannels">0</div></div>
-    <div class="strip-cell" style="--cell-accent: var(--gold)"><div class="strip-label">Prenumeranter</div><div class="strip-value" id="sumSubs">—</div></div>
-    <div class="strip-cell" style="--cell-accent: var(--cyan)"><div class="strip-label">Visningar</div><div class="strip-value" id="sumViews">—</div></div>
-    <div class="strip-cell" style="--cell-accent: var(--green)"><div class="strip-label">Engagemang</div><div class="strip-value" id="sumEngagement">—</div></div>
+    <div class="strip-cell" style="--cell-accent: var(--accent)"><div class="strip-label">Kanaler</div><div class="strip-value" id="sumChannels">7</div></div>
+    <div class="strip-cell" style="--cell-accent: var(--gold)"><div class="strip-label">Tot. Prenumeranter</div><div class="strip-value" id="sumSubs">—</div></div>
+    <div class="strip-cell" style="--cell-accent: var(--cyan)"><div class="strip-label">Tot. Visningar (10v)</div><div class="strip-value" id="sumViews">—</div></div>
+    <div class="strip-cell" style="--cell-accent: var(--green)"><div class="strip-label">Snitt Engagemang</div><div class="strip-value" id="sumEngagement">—</div></div>
   </div>
 
   <nav class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('channels')">Kanaler</button>
+    <button class="nav-tab active" onclick="switchTab('channels')">Översikt</button>
     <button class="nav-tab" onclick="switchTab('ranking')">Ranking</button>
   </nav>
 
   <div id="channelsView">
-    <div class="add-row">
-      <input class="add-input" id="channelInput" type="text" placeholder="Kanalnamn eller @handle" />
-      <button class="btn btn-primary" onclick="addChannel()">Spåra kanal</button>
-    </div>
+    <div class="section-label">Monitorering: Utvalda profiler</div>
     <div class="channel-grid" id="channelsGrid"></div>
   </div>
 
   <div id="rankingView">
+    <div class="section-label">Topplista: Engagemang</div>
     <div class="rank-list" id="leaderboard"></div>
   </div>
 </main>
 
 <script>
-// --- KONFIGURATION ---
 const YT_API_KEY = 'AIzaSyAVOaSXrASWP64P_13DpRVCgmhwbT_crJE';
 const CACHE_MINS = 30;
 
+// Dina 7 utvalda kanaler
+const TARGET_CHANNELS = [
+  '@Realskilleras',
+  '@ANJO1',
+  '@JockeJonna',
+  '@Medvikt',
+  '@Motvikten',
+  '@CarlFredrikAlexanderRask',
+  '@Cluee-news'
+];
+
 const PALETTES = [
-  { bar: '#7c3aed', avatar: '#7c3aed' }, { bar: '#ec4899', avatar: '#ec4899' },
-  { bar: '#06b6d4', avatar: '#0891b2' }, { bar: '#10b981', avatar: '#059669' }
+  { bar: '#7c3aed' }, { bar: '#ec4899' }, { bar: '#06b6d4' }, 
+  { bar: '#10b981' }, { bar: '#f59e0b' }, { bar: '#3b82f6' }, { bar: '#8b5cf6' }
 ];
 
 let channels = [];
-let paletteIndex = 0;
 
-// --- FORMATERING ---
 const fmt = (n) => n >= 1000000 ? (n/1000000).toFixed(1) + 'M' : n >= 1000 ? (n/1000).toFixed(1) + 'K' : n.toLocaleString('sv-SE');
-const getInitials = (n) => n.replace('@','').slice(0,2).toUpperCase();
 
-// --- CACHE & STORAGE ---
-function saveChannels() { localStorage.setItem('ds_saved_channels', JSON.stringify(channels.map(c => c.name))); }
-function getCached(id) {
-  const c = localStorage.getItem('yt_cache_' + id);
-  if (!c) return null;
-  const { data, ts } = JSON.parse(c);
-  return (Date.now() - ts < CACHE_MINS * 60 * 1000) ? data : null;
-}
-function setCached(id, data) { localStorage.setItem('yt_cache_' + id, JSON.stringify({ data, ts: Date.now() })); }
-
-// --- API LOGIK (OPTIMERAD) ---
 async function fetchChannelData(handle) {
-  const clean = handle.startsWith('@') ? handle : '@' + handle;
-  const cached = getCached(clean);
-  if (cached) return cached;
-
-  // 1. Kanalinfo (1 enhet)
-  let res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${encodeURIComponent(clean)}&key=${YT_API_KEY}&fields=items(id,snippet,statistics,contentDetails)`);
-  let data = await res.json();
-  
-  if (!data.items?.length) {
-    res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&id=${encodeURIComponent(handle)}&key=${YT_API_KEY}`);
-    data = await res.json();
+  const cacheKey = 'yt_cache_' + handle;
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    const { data, ts } = JSON.parse(cached);
+    if (Date.now() - ts < CACHE_MINS * 60 * 1000) return data;
   }
-  if (!data.items?.length) throw new Error('Kanal hittades inte');
+
+  // 1. Kanal & Uploads ID (1 unit)
+  const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${encodeURIComponent(handle)}&key=${YT_API_KEY}&fields=items(id,snippet,statistics,contentDetails)`);
+  const data = await res.json();
+  if (!data.items?.length) throw new Error('Kanal ej hittad');
 
   const ch = data.items[0];
   const uploadsId = ch.contentDetails.relatedPlaylists.uploads;
 
-  // 2. Senaste videor (1 enhet) - Mycket billigare än 'search'
+  // 2. Senaste 10 videos (1 unit)
   const pRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${uploadsId}&maxResults=10&key=${YT_API_KEY}&fields=items/contentDetails/videoId`);
   const pData = await pRes.json();
   const vIds = pData.items.map(i => i.contentDetails.videoId).join(',');
 
-  // 3. Videostatistik (1 enhet)
+  // 3. Stats (1 unit)
   const vRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${vIds}&key=${YT_API_KEY}&fields=items(statistics)`);
   const vData = await vRes.json();
 
   const viewHistory = vData.items.map(v => parseInt(v.statistics.viewCount || 0));
   const result = {
-    resolvedName: ch.snippet.title,
-    avatarUrl: ch.snippet.thumbnails.default.url,
+    name: ch.snippet.title,
+    avatar: ch.snippet.thumbnails.default.url,
     subs: parseInt(ch.statistics.subscriberCount || 0),
-    totalViews10d: viewHistory.reduce((a,b) => a+b, 0),
-    recentLikes: vData.items.reduce((s,v) => s + parseInt(v.statistics.likeCount || 0), 0),
-    viewHistory,
-    isReal: true
+    views: viewHistory.reduce((a,b) => a+b, 0),
+    likes: vData.items.reduce((s,v) => s + parseInt(v.statistics.likeCount || 0), 0),
+    history: viewHistory
   };
 
-  setCached(clean, result);
+  localStorage.setItem(cacheKey, JSON.stringify({ data: result, ts: Date.now() }));
   return result;
 }
 
-// --- CORE UI ---
-async function addChannel(nameFromLS = null) {
-  const input = document.getElementById('channelInput');
-  const val = nameFromLS || input.value.trim();
-  if (!val) return;
-
-  const id = 'ch_' + Date.now();
-  const ch = { id, name: val, palette: PALETTES[paletteIndex++ % PALETTES.length], loading: true };
-  channels.push(ch);
-  if (!nameFromLS) { input.value = ''; saveChannels(); }
-  renderGrid();
-
-  try {
-    const data = await fetchChannelData(val);
-    Object.assign(ch, { ...data, loading: false });
-  } catch(e) {
-    ch.loading = false; ch.error = e.message;
-  }
-  renderGrid();
-  updateSummary();
-}
-
-function removeChannel(id) {
-  channels = channels.filter(c => c.id !== id);
-  saveChannels();
-  renderGrid();
-  updateSummary();
-}
-
-function renderGrid() {
+async function loadApp() {
   const grid = document.getElementById('channelsGrid');
-  if (!channels.length) { grid.innerHTML = '<div class="empty-state">Inga kanaler spåras</div>'; return; }
+  grid.innerHTML = '<div class="empty-state">Initierar monitorering...</div>';
+  
+  channels = [];
+  const promises = TARGET_CHANNELS.map(async (handle, i) => {
+    try {
+      const data = await fetchChannelData(handle);
+      channels.push({ ...data, handle, palette: PALETTES[i] });
+    } catch (e) { console.error("Fel vid laddning:", handle, e); }
+  });
+
+  await Promise.all(promises);
+  renderAll();
+}
+
+function calculateScore(c) {
+  const viewSub = Math.min(c.views / (c.subs || 1), 1.0) * 40;
+  const likeRate = Math.min((c.likes / (c.views || 1)) / 0.1, 1.0) * 60;
+  return Math.round(viewSub + likeRate);
+}
+
+function renderAll() {
+  const grid = document.getElementById('channelsGrid');
   grid.innerHTML = channels.map(c => {
-    if (c.loading) return `<div class="ch-card"><div style="padding:40px;text-align:center">Hämtar...</div></div>`;
-    if (c.error) return `<div class="ch-card"><div style="padding:20px;color:var(--accent)">${c.error} <button onclick="removeChannel('${c.id}')">X</button></div></div>`;
-    
     const score = calculateScore(c);
-    const lr = ((c.recentLikes / (c.totalViews10d || 1)) * 100).toFixed(2);
-    const ratio = Math.min((c.totalViews10d / (c.subs || 1)) * 100, 100).toFixed(1);
+    const lr = ((c.likes / (c.views || 1)) * 100).toFixed(2);
+    const ratio = Math.min((c.views / (c.subs || 1)) * 100, 100).toFixed(1);
+    const pts = c.history.map((v, i) => `${(i/9)*100},${40 - (v/(Math.max(...c.history)||1))*35}`).join(' ');
 
     return `
       <div class="ch-card">
         <div class="ch-card-header">
           <div class="ch-identity">
-            <img src="${c.avatarUrl}" class="ch-avatar">
-            <div><div class="ch-name">${c.resolvedName}</div><div class="ch-status">LIVE</div></div>
+            <img src="${c.avatar}" class="ch-avatar">
+            <div><div class="ch-name">${c.name}</div><div class="ch-status">AKTIV</div></div>
           </div>
-          <button class="btn" onclick="removeChannel('${c.id}')" style="height:24px;width:24px;padding:0;justify-content:center">×</button>
         </div>
         <div class="ch-stats">
           <div class="stat"><div class="stat-lbl">Subs</div><div class="stat-num">${fmt(c.subs)}</div></div>
-          <div class="stat"><div class="stat-lbl">Visningar (10st)</div><div class="stat-num">${fmt(c.totalViews10d)}</div></div>
-          <div class="stat"><div class="stat-lbl">Gillningsgrad</div><div class="stat-num" style="color:var(--cyan)">${lr}%</div></div>
-          <div class="stat"><div class="stat-lbl">Visn/Sub Ratio</div><div class="stat-num" style="color:${c.palette.bar}">${ratio}%</div><div class="ratio-track"><div class="ratio-fill" style="width:${ratio}%;background:${c.palette.bar}"></div></div></div>
+          <div class="stat"><div class="stat-lbl">Visningar (10v)</div><div class="stat-num">${fmt(c.views)}</div></div>
+          <div class="stat"><div class="stat-lbl">Likes / Visning</div><div class="stat-num" style="color:var(--cyan)">${lr}%</div></div>
+          <div class="stat"><div class="stat-lbl">Visn/Sub Ratio</div><div class="stat-num" style="color:${c.palette.bar}">${ratio}%</div></div>
         </div>
-        <div class="score-row"><span class="score-lbl">Engagemangspoäng</span><span class="score-val">${score} / 100</span></div>
-        <div class="spark-wrap">${buildSparkline(c.viewHistory, c.palette.bar)}</div>
+        <div class="score-row"><span class="score-lbl">Score</span><span class="score-val">${score} / 100</span></div>
+        <div class="spark-wrap"><svg viewBox="0 0 100 40" class="spark-svg"><polyline points="${pts}" stroke="${c.palette.bar}"/></svg></div>
       </div>`;
   }).join('');
-}
 
-function calculateScore(c) {
-  const viewSub = Math.min(c.totalViews10d / (c.subs || 1), 1.0) * 40;
-  const likeRate = Math.min((c.recentLikes / (c.totalViews10d || 1)) / 0.1, 1.0) * 60;
-  return Math.round(viewSub + likeRate);
-}
-
-function buildSparkline(data, color) {
-  const max = Math.max(...data) || 1;
-  const pts = data.map((v, i) => `${(i/9)*100},${40 - (v/max)*35}`).join(' ');
-  return `<svg viewBox="0 0 100 40" class="spark-svg"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round"/></svg>`;
+  updateSummary();
+  renderLeaderboard();
 }
 
 function updateSummary() {
-  const active = channels.filter(c => !c.loading && !c.error);
-  document.getElementById('sumChannels').textContent = active.length;
-  if (!active.length) return;
-  document.getElementById('sumSubs').textContent = fmt(active.reduce((a,b)=>a+b.subs,0));
-  document.getElementById('sumViews').textContent = fmt(active.reduce((a,b)=>a+b.totalViews10d,0));
+  document.getElementById('sumSubs').textContent = fmt(channels.reduce((a,b)=>a+b.subs,0));
+  document.getElementById('sumViews').textContent = fmt(channels.reduce((a,b)=>a+b.views,0));
+  const avg = (channels.reduce((a,b)=>a+calculateScore(b),0) / channels.length).toFixed(1);
+  document.getElementById('sumEngagement').textContent = avg + ' pts';
+}
+
+function renderLeaderboard() {
+  const sorted = [...channels].sort((a,b) => calculateScore(b) - calculateScore(a));
+  document.getElementById('leaderboard').innerHTML = sorted.map((c, i) => `
+    <div class="rank-item">
+      <div class="rank-num-col">${i+1}</div>
+      <div class="rank-body">${c.name}</div>
+      <div class="rank-score-col"><div class="rank-score-big">${calculateScore(c)}</div></div>
+    </div>
+  `).join('');
 }
 
 function switchTab(t) {
   document.getElementById('channelsView').style.display = t==='channels'?'block':'none';
   document.getElementById('rankingView').style.display = t==='ranking'?'block':'none';
   document.querySelectorAll('.nav-tab').forEach((b,i) => b.classList.toggle('active', (t==='channels'&&i===0)||(t==='ranking'&&i===1)));
-  if(t==='ranking') renderLeaderboard();
-}
-
-function renderLeaderboard() {
-  const lb = document.getElementById('leaderboard');
-  const sorted = [...channels].filter(c=>!c.loading && !c.error).sort((a,b) => calculateScore(b) - calculateScore(a));
-  lb.innerHTML = sorted.map((c, i) => `
-    <div class="rank-item">
-      <div class="rank-num-col">${i+1}</div>
-      <div class="rank-body"><div style="font-weight:600">${c.resolvedName}</div></div>
-      <div class="rank-score-col"><div class="rank-score-big">${calculateScore(c)}</div></div>
-    </div>
-  `).join('');
 }
 
 async function refreshAll() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
-  localStorage.clear(); // Tvinga ny hämtning
-  await Promise.all(channels.map(c => addChannel(c.name))); // Enkel refresh-logik
+  localStorage.clear();
+  await loadApp();
   btn.classList.remove('spinning');
-  document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+  document.getElementById('lastUpdated').textContent = 'UPDATED ' + new Date().toLocaleTimeString();
 }
 
-window.onload = () => {
-  const saved = JSON.parse(localStorage.getItem('ds_saved_channels') || '[]');
-  saved.forEach(n => addChannel(n));
-};
+window.onload = loadApp;
 </script>
 </body>
 </html>
