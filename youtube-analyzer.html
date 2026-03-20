@@ -529,34 +529,32 @@ const PALETTES = [
 let channels = [];
 let paletteIndex = 0;
 
-// ─── YouTube API fetcher (direct, works on GitHub Pages) ────────────────────
+// ─── YouTube API fetcher ─────────────────────────────────────────────────────
 async function fetchChannelData(nameOrHandle) {
   const key = YT_API_KEY;
   const handle = nameOrHandle.startsWith('@') ? nameOrHandle : '@' + nameOrHandle;
   let data, res;
 
-  // Try forHandle
+  // Step 1: Try forHandle (cheapest - 1 unit)
   res = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&forHandle=' + encodeURIComponent(handle) + '&key=' + key);
   data = await res.json();
 
-  // Try as channel ID
+  // Check for API errors (quota exceeded etc)
+  if (data.error) {
+    throw new Error('API Error: ' + (data.error.message || 'quota exceeded'));
+  }
+
+  // Step 2: Try as direct channel ID (e.g. UCxxxxxx)
   if (!data.items || !data.items.length) {
     res = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=' + encodeURIComponent(nameOrHandle) + '&key=' + key);
     data = await res.json();
+    if (data.error) throw new Error('API Error: ' + (data.error.message || 'quota exceeded'));
   }
 
-  // Try search fallback
+  // If still not found - throw so we show error, NOT mock data
   if (!data.items || !data.items.length) {
-    res = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=' + encodeURIComponent(nameOrHandle) + '&maxResults=1&key=' + key);
-    const s = await res.json();
-    if (s.items && s.items.length) {
-      const cid = s.items[0].snippet.channelId;
-      res = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=' + cid + '&key=' + key);
-      data = await res.json();
-    }
+    throw new Error('Channel not found. Try using the exact @handle (e.g. @MrBeast)');
   }
-
-  if (!data.items || !data.items.length) throw new Error('Channel not found');
 
   const ch = data.items[0];
   const channelId = ch.id;
@@ -564,25 +562,26 @@ async function fetchChannelData(nameOrHandle) {
   const avatarUrl = ch.snippet.thumbnails && ch.snippet.thumbnails.default ? ch.snippet.thumbnails.default.url : null;
   const subs = parseInt(ch.statistics.subscriberCount || 0);
 
-  // Fetch latest 10 videos for likes + view history
+  // Step 3: Fetch latest 10 videos (costs ~100 units - only search endpoint)
   let recentLikes = 0;
   let viewHistory = Array(10).fill(0);
 
   try {
     const vRes = await fetch('https://www.googleapis.com/youtube/v3/search?part=id&channelId=' + channelId + '&maxResults=10&order=date&type=video&key=' + key);
     const vData = await vRes.json();
-    if (vData.items && vData.items.length) {
+    if (!vData.error && vData.items && vData.items.length) {
       const ids = vData.items.map(function(v) { return v.id.videoId; }).join(',');
+      // Step 4: Get video stats (1 unit)
       const sRes = await fetch('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=' + ids + '&key=' + key);
       const sData = await sRes.json();
-      if (sData.items) {
+      if (!sData.error && sData.items) {
         sData.items.forEach(function(v, i) {
           recentLikes += parseInt(v.statistics.likeCount || 0);
           viewHistory[i] = parseInt(v.statistics.viewCount || 0);
         });
       }
     }
-  } catch(e) { /* video fetch optional */ }
+  } catch(e) { /* video stats optional, channel data still shown */ }
 
   const totalViews10d = viewHistory.reduce(function(a, b) { return a + b; }, 0);
   return { resolvedName: resolvedName, avatarUrl: avatarUrl, subs: subs, totalViews10d: totalViews10d, recentLikes: recentLikes, viewHistory: viewHistory, isReal: true };
@@ -658,6 +657,35 @@ function buildSparkline(data, color) {
 // ─── Card renderer ────────────────────────────────────────────────────────────
 function renderCard(ch) {
   const palette = ch.palette;
+
+  // Error state
+  if (!ch.loading && ch.error && !ch.liveData) {
+    return `
+      <div class="channel-card" id="card-${ch.id}">
+        <div class="card-accent-bar" style="background: linear-gradient(90deg, #ff2d2d, transparent)"></div>
+        <div class="card-header">
+          <div class="channel-identity">
+            <div class="channel-avatar" style="background:#333">??</div>
+            <div>
+              <div class="channel-name">${ch.name}</div>
+              <div class="channel-id" style="color:#ff2d2d">FAILED TO LOAD</div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="icon-btn" title="Remove" onclick="removeChannel('${ch.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="padding:24px;font-family:'DM Mono',monospace;font-size:0.72rem;color:#ff2d2d;letter-spacing:1px;line-height:1.6">
+          ⚠ ${ch.error}<br>
+          <span style="color:var(--muted)">Try using the exact @handle format.<br>If quota exceeded, wait a few minutes.</span>
+        </div>
+        <div style="padding:0 24px 20px">
+          <button onclick="retryChannel('${ch.id}')" style="background:transparent;border:1px solid #ff2d2d;color:#ff2d2d;padding:8px 16px;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:1px;cursor:pointer;border-radius:4px;text-transform:uppercase">↺ Retry</button>
+        </div>
+      </div>`;
+  }
 
   // Loading state
   if (ch.loading) {
@@ -772,12 +800,10 @@ async function addChannel() {
     ch.loading = false;
     ch.isReal = true;
   } catch (e) {
-    const mock = genMockData(raw);
-    ch.baseData = mock;
-    ch.liveData = { ...mock };
     ch.loading = false;
     ch.isReal = false;
-    ch.error = true;
+    ch.error = e.message || 'Failed to fetch';
+    ch.liveData = null;
   }
 
   // Replace loading card with real card
@@ -786,6 +812,42 @@ async function addChannel() {
     const div = document.createElement('div');
     div.innerHTML = renderCard(ch);
     existing.replaceWith(div.firstElementChild);
+  }
+  updateSummary();
+}
+
+async function retryChannel(id) {
+  const ch = channels.find(c => c.id === id);
+  if (!ch) return;
+  ch.loading = true;
+  ch.error = null;
+  ch.liveData = null;
+  const existing = document.getElementById('card-' + id);
+  if (existing) {
+    const div = document.createElement('div');
+    div.innerHTML = renderCard(ch);
+    existing.replaceWith(div.firstElementChild);
+  }
+  try {
+    const apiData = await fetchChannelData(ch.name);
+    ch.name = apiData.resolvedName;
+    ch.avatarUrl = apiData.avatarUrl;
+    ch.baseData = apiData;
+    ch.liveData = { ...apiData };
+    ch.loading = false;
+    ch.isReal = true;
+    ch.error = null;
+  } catch(e) {
+    ch.loading = false;
+    ch.isReal = false;
+    ch.error = e.message || 'Failed to fetch';
+    ch.liveData = null;
+  }
+  const existing2 = document.getElementById('card-' + id);
+  if (existing2) {
+    const div = document.createElement('div');
+    div.innerHTML = renderCard(ch);
+    existing2.replaceWith(div.firstElementChild);
   }
   updateSummary();
 }
@@ -831,7 +893,7 @@ function updateGrid() {
 }
 
 function updateSummary() {
-  const loaded = channels.filter(c => !c.loading && c.liveData);
+  const loaded = channels.filter(c => !c.loading && c.liveData && c.isReal);
   document.getElementById('sumChannels').textContent = channels.length;
   if (loaded.length === 0) {
     document.getElementById('sumSubs').textContent = '—';
