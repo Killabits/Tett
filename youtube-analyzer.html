@@ -1,560 +1,735 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Temu vs Sekten Statistics</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<title>DRAMASERVICE</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --card: #161616;
-    --border: #222222;
-    --accent: #ff2d2d;
-    --accent2: #ff6b35;
-    --gold: #ffd166;
-    --green: #06d6a0;
-    --muted: #444;
-    --text: #e8e8e8;
-    --subtext: #888;
-  }
+:root {
+  --bg: #0d0d1a;
+  --surface: #13131f;
+  --card: #1a1a2e;
+  --border: #2a2a4a;
+  --accent: #7c3aed;
+  --accent2: #a855f7;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --gold: #f59e0b;
+  --green: #10b981;
+  --orange: #f97316;
+  --red: #ef4444;
+  --text: #f1f0ff;
+  --subtext: #8b8bbb;
+  --muted: #3a3a5c;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  text-transform: uppercase;
+}
 
-  /* Noise texture overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(124,58,237,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(236,72,153,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 50% 50%, rgba(6,182,212,0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-  /* Header */
-  header {
-    position: relative;
-    z-index: 10;
-    padding: 36px 48px 28px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(180deg, #111 0%, transparent 100%);
-  }
+/* ── HEADER ── */
+header {
+  position: relative;
+  z-index: 10;
+  padding: 28px 48px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: rgba(13,13,26,0.8);
+  backdrop-filter: blur(12px);
+}
 
-  .logo-block { display: flex; align-items: center; gap: 14px; }
+.logo-block { display: flex; align-items: center; gap: 14px; }
 
-  .yt-icon {
-    width: 38px; height: 38px;
-    background: var(--accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
+.logo-icon {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--accent), var(--pink));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 24px rgba(124,58,237,0.4);
+}
+.logo-icon svg { width: 22px; height: 22px; fill: white; }
 
-  .yt-icon svg { width: 20px; height: 20px; fill: white; }
+.logo-text { line-height: 1; }
+.logo-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #fff 0%, var(--accent2) 50%, var(--pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.logo-version {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--subtext);
+  letter-spacing: 2px;
+}
 
-  h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    letter-spacing: 3px;
-    color: var(--text);
-    line-height: 1;
-  }
+.header-right { display: flex; align-items: center; gap: 12px; }
 
-  h1 span { color: var(--accent); }
+.refresh-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--subtext);
+  padding: 8px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.refresh-btn:hover { border-color: var(--accent2); color: var(--accent2); box-shadow: 0 0 12px rgba(168,85,247,0.2); }
+.refresh-btn.spinning svg { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
+.last-updated {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+}
 
-  .refresh-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--subtext);
-    padding: 8px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    display: flex; align-items: center; gap: 8px;
-  }
+.live-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.6)} }
 
-  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* ── MAIN ── */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 36px 48px;
+}
 
-  .last-updated {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--muted);
-    letter-spacing: 0.5px;
-  }
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  width: fit-content;
+}
 
-  /* Main layout */
-  main {
-    position: relative;
-    z-index: 1;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px 48px;
-  }
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--subtext);
+  padding: 10px 24px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 9px;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.35);
+}
+.tab-btn:not(.active):hover { color: var(--text); background: var(--muted); }
 
-  /* Add channel panel */
-  .add-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px 32px;
-    margin-bottom: 48px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
+/* ── SUMMARY BAR ── */
+.summary-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
 
-  .add-panel-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    color: var(--subtext);
-    text-transform: uppercase;
-    flex-shrink: 0;
-  }
+.summary-cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.summary-cell::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--cell-color, var(--accent));
+}
+.summary-cell:hover { border-color: var(--border); }
 
-  .add-input {
-    flex: 1;
-    min-width: 220px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 16px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.85rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
+.summary-cell-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.summary-cell-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--cell-color, var(--text));
+  line-height: 1;
+}
 
-  .add-input:focus { border-color: var(--accent); }
-  .add-input::placeholder { color: var(--muted); }
+/* ── ADD PANEL ── */
+.add-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-  .add-btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
+.add-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
 
-  .add-btn:hover { background: #e01e1e; transform: translateY(-1px); }
-  .add-btn:active { transform: translateY(0); }
+.add-input {
+  flex: 1;
+  min-width: 200px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 16px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.83rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.add-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(168,85,247,0.1); }
+.add-input::placeholder { color: var(--muted); }
 
-  /* Section heading */
-  .section-heading {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 3px;
-    color: var(--subtext);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+.add-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+  border: none;
+  padding: 11px 24px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.3);
+}
+.add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,58,237,0.45); }
+.add-btn:active { transform: translateY(0); }
 
-  .section-heading::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+/* ── SECTION HEADING ── */
+.section-heading {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-heading::after { content:''; flex:1; height:1px; background:var(--border); }
 
-  /* Channel grid */
-  .channels-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 20px;
-  }
+/* ── RANKING TAB ── */
+#rankingView { display: none; }
+#channelsView { display: block; }
 
-  /* Channel card */
-  .channel-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: border-color 0.25s, transform 0.25s;
-    animation: fadeUp 0.4s ease both;
-    position: relative;
-  }
+/* ── LEADERBOARD ── */
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 40px;
+}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+.rank-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.25s;
+  animation: fadeUp 0.3s ease both;
+  position: relative;
+  overflow: hidden;
+}
+.rank-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--rank-color, var(--accent));
+}
+.rank-card:hover { border-color: #3a3a5c; transform: translateX(3px); }
 
-  .channel-card:hover {
-    border-color: #333;
-    transform: translateY(-2px);
-  }
+.rank-card.rank-1 { background: linear-gradient(90deg, rgba(245,158,11,0.08), var(--surface)); border-color: rgba(245,158,11,0.3); }
+.rank-card.rank-2 { background: linear-gradient(90deg, rgba(148,163,184,0.06), var(--surface)); border-color: rgba(148,163,184,0.2); }
+.rank-card.rank-3 { background: linear-gradient(90deg, rgba(249,115,22,0.06), var(--surface)); border-color: rgba(249,115,22,0.2); }
 
-  /* Colored accent bar at top */
-  .card-accent-bar {
-    height: 3px;
-    width: 100%;
-  }
+.rank-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1;
+}
+.rank-1 .rank-number { color: var(--gold); }
+.rank-2 .rank-number { color: #94a3b8; }
+.rank-3 .rank-number { color: var(--orange); }
 
-  .card-header {
-    padding: 20px 22px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-  }
+.rank-info { min-width: 0; }
+.rank-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+}
 
-  .channel-identity { display: flex; align-items: center; gap: 12px; }
+.rank-bars { display: flex; flex-direction: column; gap: 4px; }
+.rank-bar-row { display: flex; align-items: center; gap: 8px; }
+.rank-bar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 1px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  width: 70px;
+  flex-shrink: 0;
+}
+.rank-bar-track { flex: 1; height: 4px; background: var(--muted); border-radius: 2px; overflow: hidden; }
+.rank-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+.rank-bar-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--subtext);
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
 
-  .channel-avatar {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    color: white;
-    flex-shrink: 0;
-    letter-spacing: 1px;
-  }
+.rank-score-block { text-align: center; flex-shrink: 0; }
+.rank-score {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent2), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.rank-score-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 1.5px;
+  color: var(--subtext);
+  text-transform: uppercase;
+}
 
-  .channel-name {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text);
-  }
+/* Score breakdown pills */
+.score-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.score-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid;
+  letter-spacing: 0.5px;
+}
 
-  .channel-id {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+/* ── CHANNEL CARDS GRID ── */
+.channels-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
 
-  .card-actions { display: flex; gap: 8px; }
+.channel-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  animation: fadeUp 0.4s ease both;
+  position: relative;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.channel-card:hover { border-color: #3a3a5c; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
 
-  .icon-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    width: 28px; height: 28px;
-    border-radius: 5px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
+.card-accent-bar { height: 3px; width: 100%; }
 
-  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .icon-btn svg { width: 13px; height: 13px; }
+.card-header {
+  padding: 18px 20px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
 
-  /* Stats grid inside card */
-  .card-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--border);
-  }
+.channel-identity { display: flex; align-items: center; gap: 12px; }
+.channel-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+.channel-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+.channel-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--subtext);
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
 
-  .stat-cell {
-    background: var(--card);
-    padding: 18px 22px;
-    position: relative;
-  }
+.card-actions { display: flex; gap: 6px; }
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.icon-btn:hover { border-color: var(--red); color: var(--red); }
+.icon-btn svg { width: 12px; height: 12px; }
 
-  .stat-cell.full-width {
-    grid-column: 1 / -1;
-  }
+.card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+.stat-cell {
+  background: var(--card);
+  padding: 16px 20px;
+}
+.stat-cell.full { grid-column: 1/-1; }
 
-  .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 1.5px;
-    color: var(--subtext);
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 1.5px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: flex; align-items: center; gap: 5px;
+}
+.stat-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+}
+.stat-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--muted);
+  margin-top: 3px;
+}
 
-  .stat-label .dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: currentColor;
-  }
+.ratio-bar-track { height: 3px; background: var(--muted); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.ratio-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
 
-  .stat-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-    line-height: 1;
-    color: var(--text);
-  }
+/* Score chip on card */
+.card-score-chip {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  background: rgba(124,58,237,0.05);
+}
+.chip-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  color: var(--subtext);
+  text-transform: uppercase;
+}
+.chip-score {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--accent2), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-  .stat-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--muted);
-    margin-top: 4px;
-  }
+/* Sparkline */
+.sparkline-wrap { padding: 12px 20px 16px; border-top: 1px solid var(--border); }
+.sparkline-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 1.5px;
+  color: var(--subtext);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.sparkline-svg { width: 100%; height: 40px; overflow: visible; }
 
-  /* Ratio bar */
-  .ratio-bar-track {
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin-top: 10px;
-    overflow: hidden;
-  }
+/* Empty state */
+.empty-state {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 70px 40px;
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  color: var(--muted);
+}
+.empty-state svg { width: 44px; height: 44px; margin-bottom: 14px; opacity: 0.3; }
+.empty-state p { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; line-height: 1.8; }
 
-  .ratio-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-  /* Trend sparkline */
-  .sparkline-wrap {
-    padding: 14px 22px 16px;
-    border-top: 1px solid var(--border);
-  }
-
-  .sparkline-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 1.5px;
-    color: var(--subtext);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .sparkline-svg {
-    width: 100%;
-    height: 44px;
-    overflow: visible;
-  }
-
-  /* Empty state */
-  .empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 80px 40px;
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    color: var(--muted);
-  }
-
-  .empty-state svg { width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.3; }
-  .empty-state p { font-family: 'DM Mono', monospace; font-size: 0.8rem; letter-spacing: 1px; }
-
-  /* Summary bar */
-  .summary-bar {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 40px;
-  }
-
-  .summary-cell {
-    background: var(--surface);
-    padding: 20px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .summary-cell-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    color: var(--subtext);
-    text-transform: uppercase;
-  }
-
-  .summary-cell-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.9rem;
-    letter-spacing: 2px;
-    color: var(--text);
-  }
-
-  .summary-cell-value.red { color: var(--accent); }
-  .summary-cell-value.gold { color: var(--gold); }
-  .summary-cell-value.green { color: var(--green); }
-
-  /* Updating pulse */
-  .live-dot {
-    display: inline-block;
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    margin-right: 6px;
-    animation: pulse 2s ease infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.7); }
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-  @media (max-width: 768px) {
-    header { padding: 20px 20px; flex-wrap: wrap; gap: 12px; }
-    main { padding: 24px 20px; }
-    .channels-grid { grid-template-columns: 1fr; }
-    .summary-bar { grid-template-columns: 1fr 1fr; }
-    h1 { font-size: 1.6rem; }
-  }
+@media (max-width: 768px) {
+  header { padding: 18px 20px; }
+  main { padding: 20px 16px; }
+  .channels-grid { grid-template-columns: 1fr; }
+  .rank-card { grid-template-columns: 40px 1fr auto; gap: 12px; }
+  .summary-bar { grid-template-columns: 1fr 1fr; }
+  .logo-title { font-size: 1.3rem; }
+  .rank-card { grid-template-columns: 40px 1fr auto; gap: 12px; }
+}
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo-block">
-    <div class="yt-icon">
-      <svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+    <div class="logo-icon" id="logoIconWrap">
+      <img id="logoImg" src="" alt="" style="width:42px;height:42px;border-radius:12px;object-fit:cover;display:none">
+      <svg id="logoSvg" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
     </div>
-    <h1>TEMU VS <span>SEKTEN</span> STATISTICS</h1>
+    <div class="logo-text">
+      <div class="logo-title">DRAMASERVICE</div>
+      <div class="logo-version">BY PILSNERBRITT</div>
+    </div>
   </div>
   <div class="header-right">
-    <span class="last-updated" id="lastUpdated"><span class="live-dot"></span>SIMULATED DATA</span>
+    <span class="last-updated" id="lastUpdated"><span class="live-dot"></span>SIMULERAD DATA</span>
     <button class="refresh-btn" id="refreshBtn" onclick="refreshAll()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
         <path d="M23 4v6h-6M1 20v-6h6"/>
         <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
       </svg>
-      REFRESH
+      Uppdatera
     </button>
   </div>
 </header>
 
 <main>
-  <!-- Summary Bar -->
-  <div class="summary-bar" id="summaryBar">
-    <div class="summary-cell">
-      <div class="summary-cell-label">Channels Tracked</div>
-      <div class="summary-cell-value red" id="sumChannels">0</div>
+  <!-- Summary -->
+  <div class="summary-bar">
+    <div class="summary-cell" style="--cell-color: var(--accent2)">
+      <div class="summary-cell-label">Kanaler Spårade</div>
+      <div class="summary-cell-value" id="sumChannels">0</div>
     </div>
-    <div class="summary-cell">
-      <div class="summary-cell-label">Total Subscribers</div>
-      <div class="summary-cell-value gold" id="sumSubs">—</div>
+    <div class="summary-cell" style="--cell-color: var(--gold)">
+      <div class="summary-cell-label">Totala Prenumeranter</div>
+      <div class="summary-cell-value" id="sumSubs">—</div>
     </div>
-    <div class="summary-cell">
-      <div class="summary-cell-label">Views (10d)</div>
+    <div class="summary-cell" style="--cell-color: var(--cyan)">
+      <div class="summary-cell-label">Visningar (senaste vids)</div>
       <div class="summary-cell-value" id="sumViews">—</div>
     </div>
-    <div class="summary-cell">
-      <div class="summary-cell-label">Avg Sub/View Ratio</div>
-      <div class="summary-cell-value green" id="sumRatio">—</div>
+    <div class="summary-cell" style="--cell-color: var(--green)">
+      <div class="summary-cell-label">Genomsnittlig Engagemang</div>
+      <div class="summary-cell-value" id="sumEngagement">—</div>
     </div>
   </div>
 
-  <!-- Add Channel Panel -->
-  <div class="add-panel">
-    <span class="add-panel-label">+ Add Channel</span>
-    <input class="add-input" id="channelInput" type="text" placeholder="Enter channel name or ID (e.g. MrBeast, @mkbhd)" />
-    <button class="add-btn" onclick="addChannel()">Track Channel</button>
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('channels')">📺 Kanaler</button>
+    <button class="tab-btn" onclick="switchTab('ranking')">🏆 Ranking</button>
   </div>
 
-  <div class="section-heading">Tracked Channels</div>
+  <!-- Channels View -->
+  <div id="channelsView">
+    <div class="add-panel">
+      <span class="add-label">+ Lägg till</span>
+      <input class="add-input" id="channelInput" type="text" placeholder="Kanalnamn eller @handle (t.ex. @MrBeast)" />
+      <button class="add-btn" onclick="addChannel()">Spåra Kanal</button>
+    </div>
+    <div class="section-heading">Spårade Kanaler</div>
+    <div class="channels-grid" id="channelsGrid">
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <p>INGA KANALER SPÅRAS ÄNNU<br>LÄGG TILL EN KANAL OVAN FÖR ATT BÖRJA</p>
+      </div>
+    </div>
+  </div>
 
-  <!-- Channel Cards Grid -->
-  <div class="channels-grid" id="channelsGrid">
-    <div class="empty-state" id="emptyState">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="2" y="3" width="20" height="14" rx="2"/>
-        <path d="M8 21h8M12 17v4"/>
-        <path d="M10 10l2-2 2 2"/>
-      </svg>
-      <p>NO CHANNELS TRACKED YET<br>ADD A CHANNEL ABOVE TO GET STARTED</p>
+  <!-- Ranking View -->
+  <div id="rankingView">
+    <div class="section-heading">Engagemangsranking</div>
+    <div class="leaderboard" id="leaderboard">
+      <div class="empty-state" style="border-radius:12px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+        </svg>
+        <p>LÄGG TILL MINST 2 KANALER<br>FÖR ATT SE RANKING</p>
+      </div>
     </div>
   </div>
 </main>
 
 <script>
-// ─── API Key ──────────────────────────────────────────────────────────────────
+// ─── Config ───────────────────────────────────────────────────────────────────
 const YT_API_KEY = 'AIzaSyAVOaSXrASWP64P_13DpRVCgmhwbT_crJE';
 
-// ─── Palette for channel colors ─────────────────────────────────────────────
 const PALETTES = [
-  { bar: '#ff2d2d', avatar: '#ff2d2d' },
-  { bar: '#ff6b35', avatar: '#ff6b35' },
-  { bar: '#ffd166', avatar: '#b89020' },
-  { bar: '#06d6a0', avatar: '#048a67' },
-  { bar: '#4cc9f0', avatar: '#1a86b0' },
-  { bar: '#a855f7', avatar: '#7c3aed' },
-  { bar: '#f472b6', avatar: '#be185d' },
-  { bar: '#84cc16', avatar: '#4d7c0f' },
+  { bar: '#7c3aed', avatar: '#7c3aed' },
+  { bar: '#ec4899', avatar: '#ec4899' },
+  { bar: '#06b6d4', avatar: '#0891b2' },
+  { bar: '#10b981', avatar: '#059669' },
+  { bar: '#f59e0b', avatar: '#d97706' },
+  { bar: '#f97316', avatar: '#ea580c' },
+  { bar: '#8b5cf6', avatar: '#7c3aed' },
+  { bar: '#14b8a6', avatar: '#0f766e' },
 ];
 
 let channels = [];
 let paletteIndex = 0;
+let currentTab = 'channels';
 
-// ─── YouTube API fetcher ─────────────────────────────────────────────────────
+// ─── Scoring System ───────────────────────────────────────────────────────────
+// All metrics are ratios relative to subscribers so small channels compete fairly
+// Max 100 points total, scored relative to the group
+
+function computeScore(ch) {
+  if (!ch.liveData || !ch.isReal) return null;
+  const d = ch.liveData;
+  const subs = d.subs || 1;
+  const views = d.totalViews10d || 0;
+  const likes = d.recentLikes || 0;
+  const videos = d.viewHistory.filter(v => v > 0).length || 1;
+
+  // Raw ratios (not yet normalized)
+  return {
+    viewRate: views / subs,           // views per sub (30pts)
+    likeRate: views > 0 ? likes / views : 0, // likes per view (35pts)
+    consistency: videos / 10,         // how many of 10 slots have content (20pts)
+    avgViews: views / videos,         // avg views per video (15pts)
+    raw: { views, likes, subs, videos }
+  };
+}
+
+function calculateRankings() {
+  const scored = channels.filter(c => c.liveData && c.isReal && !c.loading);
+  if (scored.length < 1) return [];
+
+  // Get raw scores
+  const rawScores = scored.map(ch => ({ ch, metrics: computeScore(ch) })).filter(x => x.metrics);
+
+  // Normalize each metric relative to group max
+  const maxViewRate    = Math.max(...rawScores.map(x => x.metrics.viewRate), 0.0001);
+  const maxLikeRate    = Math.max(...rawScores.map(x => x.metrics.likeRate), 0.0001);
+  const maxConsistency = Math.max(...rawScores.map(x => x.metrics.consistency), 0.0001);
+  const maxAvgViews    = Math.max(...rawScores.map(x => x.metrics.avgViews), 0.0001);
+
+  return rawScores.map(({ ch, metrics }) => {
+    const viewScore        = (metrics.viewRate / maxViewRate) * 30;
+    const likeScore        = (metrics.likeRate / maxLikeRate) * 35;
+    const consistencyScore = (metrics.consistency / maxConsistency) * 20;
+    const avgViewScore     = (metrics.avgViews / maxAvgViews) * 15;
+    const total = Math.round(viewScore + likeScore + consistencyScore + avgViewScore);
+    return {
+      ch,
+      total,
+      breakdown: {
+        visningar: Math.round(viewScore),
+        gilla: Math.round(likeScore),
+        aktivitet: Math.round(consistencyScore),
+        snittvisn: Math.round(avgViewScore),
+      },
+      metrics
+    };
+  }).sort((a, b) => b.total - a.total);
+}
+
+// ─── YouTube API ──────────────────────────────────────────────────────────────
 async function fetchChannelData(nameOrHandle) {
   const key = YT_API_KEY;
   const handle = nameOrHandle.startsWith('@') ? nameOrHandle : '@' + nameOrHandle;
   let data, res;
 
-  // Step 1: Try forHandle (cheapest - 1 unit)
   res = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&forHandle=' + encodeURIComponent(handle) + '&key=' + key);
   data = await res.json();
+  if (data.error) throw new Error('API-fel: ' + (data.error.message || 'kvot överskriden'));
 
-  // Check for API errors (quota exceeded etc)
-  if (data.error) {
-    throw new Error('API Error: ' + (data.error.message || 'quota exceeded'));
-  }
-
-  // Step 2: Try as direct channel ID (e.g. UCxxxxxx)
   if (!data.items || !data.items.length) {
     res = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=' + encodeURIComponent(nameOrHandle) + '&key=' + key);
     data = await res.json();
-    if (data.error) throw new Error('API Error: ' + (data.error.message || 'quota exceeded'));
+    if (data.error) throw new Error('API-fel: ' + (data.error.message || 'kvot överskriden'));
   }
 
-  // If still not found - throw so we show error, NOT mock data
-  if (!data.items || !data.items.length) {
-    throw new Error('Channel not found. Try using the exact @handle (e.g. @MrBeast)');
-  }
+  if (!data.items || !data.items.length) throw new Error('Kanalen hittades inte. Prova med exakt @handle.');
 
   const ch = data.items[0];
   const channelId = ch.id;
@@ -562,7 +737,6 @@ async function fetchChannelData(nameOrHandle) {
   const avatarUrl = ch.snippet.thumbnails && ch.snippet.thumbnails.default ? ch.snippet.thumbnails.default.url : null;
   const subs = parseInt(ch.statistics.subscriberCount || 0);
 
-  // Step 3: Fetch latest 10 videos (costs ~100 units - only search endpoint)
   let recentLikes = 0;
   let viewHistory = Array(10).fill(0);
 
@@ -571,7 +745,6 @@ async function fetchChannelData(nameOrHandle) {
     const vData = await vRes.json();
     if (!vData.error && vData.items && vData.items.length) {
       const ids = vData.items.map(function(v) { return v.id.videoId; }).join(',');
-      // Step 4: Get video stats (1 unit)
       const sRes = await fetch('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=' + ids + '&key=' + key);
       const sData = await sRes.json();
       if (!sData.error && sData.items) {
@@ -581,198 +754,126 @@ async function fetchChannelData(nameOrHandle) {
         });
       }
     }
-  } catch(e) { /* video stats optional, channel data still shown */ }
+  } catch(e) {}
 
-  const totalViews10d = viewHistory.reduce(function(a, b) { return a + b; }, 0);
-  return { resolvedName: resolvedName, avatarUrl: avatarUrl, subs: subs, totalViews10d: totalViews10d, recentLikes: recentLikes, viewHistory: viewHistory, isReal: true };
-}
-// ─── Mock data generator (fallback) ──────────────────────────────────────────
-function genMockData(name) {
-  let seed = name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  const rng = (min, max) => {
-    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-    return Math.floor((seed / 0x7fffffff) * (max - min) + min);
-  };
-  const subs = rng(5000, 50_000_000);
-  const avgDailyViews = rng(1000, subs * 0.08);
-  const totalViews10d = Math.max(0, avgDailyViews * 10 + rng(-avgDailyViews * 2, avgDailyViews * 2));
-  const recentLikes = rng(200, Math.floor(totalViews10d * 0.06));
-  const viewHistory = [];
-  for (let i = 0; i < 10; i++) {
-    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-    viewHistory.push(rng(avgDailyViews * 0.5, avgDailyViews * 1.8));
-  }
-  return { subs, totalViews10d, recentLikes, viewHistory, isReal: false };
+  const totalViews10d = viewHistory.reduce(function(a,b){return a+b;},0);
+  return { resolvedName, avatarUrl, subs, totalViews10d, recentLikes, viewHistory, isReal: true };
 }
 
-function addNoise(data) {
-  return {
-    ...data,
-    subs: data.subs + Math.floor((Math.random() - 0.5) * 500),
-    totalViews10d: Math.max(0, data.totalViews10d + Math.floor((Math.random() - 0.5) * 3000)),
-    recentLikes: Math.max(0, data.recentLikes + Math.floor((Math.random() - 0.5) * 50)),
-    viewHistory: data.viewHistory.map(v => Math.max(0, v + Math.floor((Math.random() - 0.5) * v * 0.1))),
-  };
-}
-
-// ─── Formatters ──────────────────────────────────────────────────────────────
+// ─── Formatters ───────────────────────────────────────────────────────────────
 function fmt(n) {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
-  return n.toLocaleString();
+  if (n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+  if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+  return n.toLocaleString('sv-SE');
 }
+function pct(n) { return (n*100).toFixed(1) + '%'; }
+function getInitials(name) { return name.replace(/^@/,'').slice(0,2).toUpperCase(); }
 
-function getInitials(name) {
-  return name.replace(/^@/, '').slice(0, 2).toUpperCase();
-}
-
-// ─── Sparkline SVG builder ────────────────────────────────────────────────────
+// ─── Sparkline ────────────────────────────────────────────────────────────────
 function buildSparkline(data, color) {
-  const W = 340, H = 44;
-  const min = Math.min(...data), max = Math.max(...data);
-  const range = max - min || 1;
-  const pts = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * W;
-    const y = H - ((v - min) / range) * (H - 6) - 3;
-    return `${x},${y}`;
+  const W=320, H=40;
+  const nonzero = data.filter(v=>v>0);
+  if (nonzero.length < 2) return '<svg class="sparkline-svg"><text x="50%" y="50%" fill="#3a3a5c" font-size="10" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono">ingen data</text></svg>';
+  const min=Math.min(...data), max=Math.max(...data);
+  const range=max-min||1;
+  const pts=data.map(function(v,i){
+    return [(i/(data.length-1))*W, H-((v-min)/range)*(H-6)-3];
   });
-  const pathD = `M ${pts.join(' L ')}`;
-  const areaD = `M ${pts[0]} L ${pts.join(' L ')} L ${W},${H} L 0,${H} Z`;
-
-  return `
-    <svg class="sparkline-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="sg_${color.replace('#','')}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${color}" stop-opacity="0.25"/>
-          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="${areaD}" fill="url(#sg_${color.replace('#','')})" />
-      <path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="${pts[pts.length-1].split(',')[0]}" cy="${pts[pts.length-1].split(',')[1]}" r="3" fill="${color}"/>
-    </svg>
-  `;
+  const pathD='M '+pts.map(p=>p.join(',')).join(' L ');
+  const areaD='M '+pts[0].join(',') + ' L '+pts.map(p=>p.join(',')).join(' L ')+' L '+W+','+H+' L 0,'+H+' Z';
+  const id='sg'+color.replace('#','');
+  return '<svg class="sparkline-svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+color+'" stop-opacity="0.3"/><stop offset="100%" stop-color="'+color+'" stop-opacity="0"/></linearGradient></defs><path d="'+areaD+'" fill="url(#'+id+')"/><path d="'+pathD+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="'+pts[pts.length-1][0]+'" cy="'+pts[pts.length-1][1]+'" r="3" fill="'+color+'"/></svg>';
 }
 
 // ─── Card renderer ────────────────────────────────────────────────────────────
 function renderCard(ch) {
-  const palette = ch.palette;
+  const p = ch.palette;
 
-  // Error state
-  if (!ch.loading && ch.error && !ch.liveData) {
-    return `
-      <div class="channel-card" id="card-${ch.id}">
-        <div class="card-accent-bar" style="background: linear-gradient(90deg, #ff2d2d, transparent)"></div>
-        <div class="card-header">
-          <div class="channel-identity">
-            <div class="channel-avatar" style="background:#333">??</div>
-            <div>
-              <div class="channel-name">${ch.name}</div>
-              <div class="channel-id" style="color:#ff2d2d">FAILED TO LOAD</div>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="icon-btn" title="Remove" onclick="removeChannel('${ch.id}')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>
-        </div>
-        <div style="padding:24px;font-family:'DM Mono',monospace;font-size:0.72rem;color:#ff2d2d;letter-spacing:1px;line-height:1.6">
-          ⚠ ${ch.error}<br>
-          <span style="color:var(--muted)">Try using the exact @handle format.<br>If quota exceeded, wait a few minutes.</span>
-        </div>
-        <div style="padding:0 24px 20px">
-          <button onclick="retryChannel('${ch.id}')" style="background:transparent;border:1px solid #ff2d2d;color:#ff2d2d;padding:8px 16px;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:1px;cursor:pointer;border-radius:4px;text-transform:uppercase">↺ Retry</button>
-        </div>
-      </div>`;
-  }
+  if (ch.loading) return '<div class="channel-card" id="card-'+ch.id+'"><div class="card-accent-bar" style="background:'+p.bar+'"></div><div class="card-header"><div class="channel-identity"><div class="channel-avatar" style="background:'+p.avatar+'">'+getInitials(ch.name)+'</div><div><div class="channel-name">'+ch.name+'</div><div class="channel-status" style="color:'+p.bar+'">Hämtar data...</div></div></div></div><div style="padding:36px;text-align:center;font-family:JetBrains Mono,monospace;font-size:0.7rem;color:var(--subtext);letter-spacing:2px"><span class="live-dot" style="background:'+p.bar+'"></span>LADDAR...</div></div>';
 
-  // Loading state
-  if (ch.loading) {
-    return `
-      <div class="channel-card" id="card-${ch.id}">
-        <div class="card-accent-bar" style="background: linear-gradient(90deg, ${palette.bar}, transparent)"></div>
-        <div class="card-header">
-          <div class="channel-identity">
-            <div class="channel-avatar" style="background: ${palette.avatar}">${getInitials(ch.name)}</div>
-            <div>
-              <div class="channel-name">${ch.name}</div>
-              <div class="channel-id" style="color:${palette.bar}">FETCHING FROM YOUTUBE...</div>
-            </div>
-          </div>
-        </div>
-        <div style="padding:40px;text-align:center;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted);letter-spacing:2px">
-          <div style="margin-bottom:10px">
-            <span style="display:inline-block;width:8px;height:8px;background:${palette.bar};border-radius:50%;animation:pulse 1s ease infinite"></span>
-          </div>
-          LOADING REAL DATA...
-        </div>
-      </div>`;
-  }
+  if (ch.error && !ch.liveData) return '<div class="channel-card" id="card-'+ch.id+'"><div class="card-accent-bar" style="background:var(--red)"></div><div class="card-header"><div class="channel-identity"><div class="channel-avatar" style="background:#333">??</div><div><div class="channel-name">'+ch.name+'</div><div class="channel-status" style="color:var(--red)">FEL VID HÄMTNING</div></div></div><div class="card-actions"><button class="icon-btn" onclick="removeChannel(\''+ch.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div></div><div style="padding:20px;font-family:JetBrains Mono,monospace;font-size:0.7rem;color:var(--red);line-height:1.7">⚠ '+ch.error+'<br><span style="color:var(--muted)">Prova @handle-format.</span></div><div style="padding:0 20px 16px"><button onclick="retryChannel(\''+ch.id+'\')" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:7px 14px;font-family:JetBrains Mono,monospace;font-size:0.68rem;cursor:pointer;border-radius:6px">↺ Försök igen</button></div></div>';
 
   const d = ch.liveData;
-  const ratio = ((d.subs / (d.totalViews10d || 1)) * 100).toFixed(2);
-  const ratioBarWidth = Math.min(parseFloat(ratio), 100);
-  const statusLabel = ch.isReal ? 'LIVE · YOUTUBE API' : (ch.error ? 'MOCK DATA · NOT FOUND' : 'SIMULATED · AUTO-REFRESH');
-  const statusColor = ch.isReal ? 'var(--green)' : (ch.error ? 'var(--gold)' : 'var(--subtext)');
-  const avatarContent = ch.avatarUrl
-    ? `<img src="${ch.avatarUrl}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">`
-    : `<div class="channel-avatar" style="background:${palette.avatar}">${getInitials(ch.name)}</div>`;
+  const ratio = ((d.subs/(d.totalViews10d||1))*100).toFixed(1);
+  const likeRate = d.totalViews10d > 0 ? ((d.recentLikes/d.totalViews10d)*100).toFixed(2) : '0.00';
+  const ratioW = Math.min(parseFloat(ratio),100);
+  const statusLabel = ch.isReal ? 'LIVE · YOUTUBE API' : 'SIMULERAD DATA';
+  const statusColor = ch.isReal ? 'var(--green)' : 'var(--subtext)';
+  const avatarHtml = ch.avatarUrl ? '<img src="'+ch.avatarUrl+'" style="width:38px;height:38px;border-radius:50%;object-fit:cover">' : '<div class="channel-avatar" style="background:'+p.avatar+'">'+getInitials(ch.name)+'</div>';
 
-  return `
-    <div class="channel-card" id="card-${ch.id}">
-      <div class="card-accent-bar" style="background: linear-gradient(90deg, ${palette.bar}, transparent)"></div>
-      <div class="card-header">
-        <div class="channel-identity">
-          ${avatarContent}
-          <div>
-            <div class="channel-name">${ch.name}</div>
-            <div class="channel-id" style="color:${statusColor}">${statusLabel}</div>
-          </div>
-        </div>
-        <div class="card-actions">
-          <button class="icon-btn" title="Remove channel" onclick="removeChannel('${ch.id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+  // Score
+  const rankings = calculateRankings();
+  const myRank = rankings.find(r => r.ch.id === ch.id);
+  const scoreHtml = myRank ? '<div class="card-score-chip"><span class="chip-label">Engagemangspoäng</span><span class="chip-score">'+myRank.total+'/100</span></div>' : '';
 
-      <div class="card-stats">
-        <div class="stat-cell">
-          <div class="stat-label"><span class="dot" style="color:${palette.bar}"></span>Subscribers</div>
-          <div class="stat-value" id="stat-subs-${ch.id}">${fmt(d.subs)}</div>
-          <div class="stat-sub">Total followers</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-label"><span class="dot" style="color:#4cc9f0"></span>Video Likes</div>
-          <div class="stat-value" id="stat-likes-${ch.id}">${fmt(d.recentLikes)}</div>
-          <div class="stat-sub">Latest 10 videos</div>
-        </div>
-        <div class="stat-cell full-width">
-          <div class="stat-label"><span class="dot" style="color:#ffd166"></span>Views — ${ch.isReal ? 'Latest 10 Videos' : 'Last 10 Days'}</div>
-          <div class="stat-value" id="stat-views-${ch.id}">${fmt(d.totalViews10d)}</div>
-          <div class="stat-sub">${ch.isReal ? 'Sum of recent video views' : 'Rolling 10-day window'}</div>
-        </div>
-        <div class="stat-cell full-width">
-          <div class="stat-label"><span class="dot" style="color:${palette.bar}"></span>Sub / View Ratio</div>
-          <div style="display:flex;align-items:baseline;gap:10px">
-            <div class="stat-value" id="stat-ratio-${ch.id}" style="color:${palette.bar}">${ratio}%</div>
-          </div>
-          <div class="ratio-bar-track">
-            <div class="ratio-bar-fill" id="ratio-bar-${ch.id}" style="width:${ratioBarWidth}%;background:${palette.bar}"></div>
-          </div>
-          <div class="stat-sub">Subscribers as % of recent views</div>
-        </div>
-      </div>
+  return '<div class="channel-card" id="card-'+ch.id+'">'+
+    '<div class="card-accent-bar" style="background:linear-gradient(90deg,'+p.bar+',transparent)"></div>'+
+    '<div class="card-header">'+
+      '<div class="channel-identity">'+avatarHtml+'<div><div class="channel-name">'+ch.name+'</div><div class="channel-status" style="color:'+statusColor+'">'+statusLabel+'</div></div></div>'+
+      '<div class="card-actions"><button class="icon-btn" onclick="removeChannel(\''+ch.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'+
+    '</div>'+
+    '<div class="card-stats">'+
+      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:'+p.bar+'"></span>Prenumeranter</div><div class="stat-value" id="stat-subs-'+ch.id+'">'+fmt(d.subs)+'</div><div class="stat-sub">Totalt</div></div>'+
+      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:var(--pink)"></span>Gillningar</div><div class="stat-value" id="stat-likes-'+ch.id+'">'+fmt(d.recentLikes)+'</div><div class="stat-sub">Senaste 10 vids</div></div>'+
+      '<div class="stat-cell full"><div class="stat-label"><span class="stat-dot" style="color:var(--gold)"></span>Visningar — Senaste videor</div><div class="stat-value" id="stat-views-'+ch.id+'">'+fmt(d.totalViews10d)+'</div><div class="stat-sub">Summa av 10 senaste videos</div></div>'+
+      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:var(--cyan)"></span>Gillningsgrad</div><div class="stat-value" style="font-size:1.3rem;color:var(--cyan)" id="stat-lr-'+ch.id+'">'+likeRate+'%</div><div class="stat-sub">Gillningar / visningar</div></div>'+
+      '<div class="stat-cell"><div class="stat-label"><span class="stat-dot" style="color:'+p.bar+'"></span>Sub/Visn-ratio</div><div class="stat-value" style="font-size:1.3rem;color:'+p.bar+'" id="stat-ratio-'+ch.id+'">'+ratio+'%</div><div class="ratio-bar-track"><div class="ratio-bar-fill" id="ratio-bar-'+ch.id+'" style="width:'+ratioW+'%;background:'+p.bar+'"></div></div></div>'+
+    '</div>'+
+    scoreHtml+
+    '<div class="sparkline-wrap"><div class="sparkline-label">Videovisningar — trend</div><div id="spark-'+ch.id+'">'+buildSparkline(d.viewHistory, p.bar)+'</div></div>'+
+  '</div>';
+}
 
-      <div class="sparkline-wrap">
-        <div class="sparkline-label">${ch.isReal ? 'Per-Video View Distribution' : '10-Day View Trend'}</div>
-        <div id="spark-${ch.id}">${buildSparkline(d.viewHistory, palette.bar)}</div>
-      </div>
-    </div>
-  `;
+// ─── Leaderboard renderer ─────────────────────────────────────────────────────
+function renderLeaderboard() {
+  const lb = document.getElementById('leaderboard');
+  const rankings = calculateRankings();
+
+  if (rankings.length < 1) {
+    lb.innerHTML = '<div class="empty-state" style="border-radius:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><p>LÄGG TILL MINST 2 KANALER<br>FÖR ATT SE RANKING</p></div>';
+    return;
+  }
+
+  const medals = ['🥇','🥈','🥉'];
+  const rankColors = ['var(--gold)','#94a3b8','var(--orange)'];
+
+  lb.innerHTML = rankings.map(function(r, i) {
+    const rankClass = i < 3 ? 'rank-'+(i+1) : '';
+    const color = rankColors[i] || 'var(--accent2)';
+    const p = r.ch.palette;
+    const d = r.ch.liveData;
+
+    const maxViews = Math.max(...rankings.map(x=>x.metrics.viewRate));
+    const maxLikes = Math.max(...rankings.map(x=>x.metrics.likeRate));
+    const maxCons  = Math.max(...rankings.map(x=>x.metrics.consistency));
+
+    const vW = (r.metrics.viewRate/maxViews*100).toFixed(0);
+    const lW = (r.metrics.likeRate/maxLikes*100).toFixed(0);
+    const cW = (r.metrics.consistency/maxCons*100).toFixed(0);
+
+    const pillColors = {visningar:'var(--cyan)',gilla:'var(--pink)',aktivitet:'var(--green)',snittvisn:'var(--gold)'};
+    const pillLabels = {visningar:'Visningar','gilla':'Gillningar','aktivitet':'Aktivitet','snittvisn':'Snittvisn.'};
+    const pills = Object.entries(r.breakdown).map(function(kv) {
+      const k=kv[0],v=kv[1];
+      return '<span class="score-pill" style="color:'+pillColors[k]+';border-color:'+pillColors[k]+'33">'+pillLabels[k]+' +'+v+'</span>';
+    }).join('');
+
+    const avatarHtml = r.ch.avatarUrl ? '<img src="'+r.ch.avatarUrl+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover;margin-right:10px">' : '<div style="width:36px;height:36px;border-radius:50%;background:'+p.avatar+';display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;color:white;font-size:0.85rem;margin-right:10px;flex-shrink:0">'+getInitials(r.ch.name)+'</div>';
+
+    return '<div class="rank-card '+rankClass+'" style="--rank-color:'+p.bar+'">'+
+      '<div class="rank-number">'+(medals[i]||('#'+(i+1)))+'</div>'+
+      '<div class="rank-info">'+
+        '<div style="display:flex;align-items:center;margin-bottom:8px">'+avatarHtml+'<div class="rank-name">'+r.ch.name+'</div></div>'+
+        '<div class="rank-bars">'+
+          '<div class="rank-bar-row"><span class="rank-bar-label">Visn/sub</span><div class="rank-bar-track"><div class="rank-bar-fill" style="width:'+vW+'%;background:var(--cyan)"></div></div><span class="rank-bar-val">'+vW+'%</span></div>'+
+          '<div class="rank-bar-row"><span class="rank-bar-label">Gilln.grad</span><div class="rank-bar-track"><div class="rank-bar-fill" style="width:'+lW+'%;background:var(--pink)"></div></div><span class="rank-bar-val">'+lW+'%</span></div>'+
+          '<div class="rank-bar-row"><span class="rank-bar-label">Aktivitet</span><div class="rank-bar-track"><div class="rank-bar-fill" style="width:'+cW+'%;background:var(--green)"></div></div><span class="rank-bar-val">'+cW+'%</span></div>'+
+        '</div>'+
+        '<div class="score-pills">'+pills+'</div>'+
+      '</div>'+
+      '<div class="rank-score-block"><div class="rank-score">'+r.total+'</div><div class="rank-score-label">poäng</div></div>'+
+    '</div>';
+  }).join('');
 }
 
 // ─── Core actions ─────────────────────────────────────────────────────────────
@@ -785,7 +886,6 @@ async function addChannel() {
   const palette = PALETTES[paletteIndex % PALETTES.length];
   paletteIndex++;
 
-  // Show loading card immediately
   const ch = { id, name: raw, palette, baseData: null, liveData: null, loading: true };
   channels.push(ch);
   input.value = '';
@@ -799,14 +899,14 @@ async function addChannel() {
     ch.liveData = { ...apiData };
     ch.loading = false;
     ch.isReal = true;
-  } catch (e) {
+    ch.error = null;
+  } catch(e) {
     ch.loading = false;
     ch.isReal = false;
-    ch.error = e.message || 'Failed to fetch';
+    ch.error = e.message || 'Hämtning misslyckades';
     ch.liveData = null;
   }
 
-  // Replace loading card with real card
   const existing = document.getElementById('card-' + id);
   if (existing) {
     const div = document.createElement('div');
@@ -814,151 +914,111 @@ async function addChannel() {
     existing.replaceWith(div.firstElementChild);
   }
   updateSummary();
+  renderLeaderboard();
 }
 
 async function retryChannel(id) {
   const ch = channels.find(c => c.id === id);
   if (!ch) return;
-  ch.loading = true;
-  ch.error = null;
-  ch.liveData = null;
-  const existing = document.getElementById('card-' + id);
-  if (existing) {
-    const div = document.createElement('div');
-    div.innerHTML = renderCard(ch);
-    existing.replaceWith(div.firstElementChild);
-  }
+  ch.loading = true; ch.error = null; ch.liveData = null;
+  const el = document.getElementById('card-'+id);
+  if (el) { const d=document.createElement('div'); d.innerHTML=renderCard(ch); el.replaceWith(d.firstElementChild); }
   try {
     const apiData = await fetchChannelData(ch.name);
-    ch.name = apiData.resolvedName;
-    ch.avatarUrl = apiData.avatarUrl;
-    ch.baseData = apiData;
-    ch.liveData = { ...apiData };
-    ch.loading = false;
-    ch.isReal = true;
-    ch.error = null;
+    ch.name = apiData.resolvedName; ch.avatarUrl = apiData.avatarUrl;
+    ch.baseData = apiData; ch.liveData = {...apiData};
+    ch.loading = false; ch.isReal = true; ch.error = null;
   } catch(e) {
-    ch.loading = false;
-    ch.isReal = false;
-    ch.error = e.message || 'Failed to fetch';
-    ch.liveData = null;
+    ch.loading = false; ch.isReal = false;
+    ch.error = e.message || 'Hämtning misslyckades'; ch.liveData = null;
   }
-  const existing2 = document.getElementById('card-' + id);
-  if (existing2) {
-    const div = document.createElement('div');
-    div.innerHTML = renderCard(ch);
-    existing2.replaceWith(div.firstElementChild);
-  }
-  updateSummary();
+  const el2 = document.getElementById('card-'+id);
+  if (el2) { const d=document.createElement('div'); d.innerHTML=renderCard(ch); el2.replaceWith(d.firstElementChild); }
+  updateSummary(); renderLeaderboard();
 }
 
 function removeChannel(id) {
   channels = channels.filter(c => c.id !== id);
-  updateGrid();
-  updateSummary();
+  updateGrid(); updateSummary(); renderLeaderboard();
 }
 
 function updateGrid() {
   const grid = document.getElementById('channelsGrid');
-
   if (channels.length === 0) {
-    grid.innerHTML = `<div class="empty-state" id="emptyState">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="2" y="3" width="20" height="14" rx="2"/>
-        <path d="M8 21h8M12 17v4"/>
-        <path d="M10 10l2-2 2 2"/>
-      </svg>
-      <p>NO CHANNELS TRACKED YET<br>ADD A CHANNEL ABOVE TO GET STARTED</p>
-    </div>`;
+    grid.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><p>INGA KANALER SPÅRAS ÄNNU<br>LÄGG TILL EN KANAL OVAN FÖR ATT BÖRJA</p></div>';
     return;
   }
-
-  const existingIds = new Set([...grid.querySelectorAll('.channel-card')].map(el => el.id.replace('card-', '')));
-  const currentIds = new Set(channels.map(c => c.id));
-
-  existingIds.forEach(id => {
-    if (!currentIds.has(id)) {
-      const el = document.getElementById('card-' + id);
-      if (el) el.remove();
-    }
-  });
-
-  channels.forEach(ch => {
-    if (!existingIds.has(ch.id)) {
-      const div = document.createElement('div');
-      div.innerHTML = renderCard(ch);
-      grid.appendChild(div.firstElementChild);
-    }
-  });
+  const existingIds = new Set([...grid.querySelectorAll('.channel-card')].map(el=>el.id.replace('card-','')));
+  const currentIds = new Set(channels.map(c=>c.id));
+  existingIds.forEach(id=>{ if(!currentIds.has(id)){const el=document.getElementById('card-'+id);if(el)el.remove();} });
+  channels.forEach(ch=>{ if(!existingIds.has(ch.id)){const div=document.createElement('div');div.innerHTML=renderCard(ch);grid.appendChild(div.firstElementChild);} });
 }
 
 function updateSummary() {
   const loaded = channels.filter(c => !c.loading && c.liveData && c.isReal);
   document.getElementById('sumChannels').textContent = channels.length;
-  if (loaded.length === 0) {
-    document.getElementById('sumSubs').textContent = '—';
-    document.getElementById('sumViews').textContent = '—';
-    document.getElementById('sumRatio').textContent = '—';
+  if (!loaded.length) {
+    ['sumSubs','sumViews','sumEngagement'].forEach(id=>document.getElementById(id).textContent='—');
     return;
   }
-  const totalSubs = loaded.reduce((a, c) => a + c.liveData.subs, 0);
-  const totalViews = loaded.reduce((a, c) => a + c.liveData.totalViews10d, 0);
-  const avgRatio = (loaded.reduce((a, c) => a + parseFloat(((c.liveData.subs / (c.liveData.totalViews10d || 1)) * 100)), 0) / loaded.length).toFixed(2);
+  const totalSubs = loaded.reduce((a,c)=>a+c.liveData.subs,0);
+  const totalViews = loaded.reduce((a,c)=>a+c.liveData.totalViews10d,0);
+  const avgEng = loaded.reduce((a,c)=>a+(c.liveData.totalViews10d>0?c.liveData.recentLikes/c.liveData.totalViews10d:0),0)/loaded.length;
   document.getElementById('sumSubs').textContent = fmt(totalSubs);
   document.getElementById('sumViews').textContent = fmt(totalViews);
-  document.getElementById('sumRatio').textContent = avgRatio + '%';
+  document.getElementById('sumEngagement').textContent = (avgEng*100).toFixed(2)+'%';
 }
+
+// ─── Logo (hardcoded) ────────────────────────────────────────────────────────
+(function() {
+  const img = document.getElementById('logoImg');
+  const svg = document.getElementById('logoSvg');
+  img.src = 'https://i.imgur.com/rXa2aEV.jpg';
+  img.style.display = 'block';
+  svg.style.display = 'none';
+  img.onerror = function() { img.style.display='none'; svg.style.display='block'; };
+})();
 
 async function refreshAll() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
-
-  const loaded = channels.filter(c => !c.loading && c.liveData);
-
-  // Re-fetch real channels; add noise to mock ones
-  await Promise.all(loaded.map(async ch => {
-    if (ch.isReal) {
-      try {
-        const fresh = await fetchChannelData(ch.name);
-        ch.baseData = fresh;
-        ch.liveData = { ...fresh };
-      } catch(e) { ch.liveData = addNoise(ch.baseData); }
-    } else {
-      ch.liveData = addNoise(ch.baseData);
-    }
-
-    const s = ch.liveData;
-    const ratio = ((s.subs / (s.totalViews10d || 1)) * 100).toFixed(2);
-    const elSubs = document.getElementById(`stat-subs-${ch.id}`);
-    const elLikes = document.getElementById(`stat-likes-${ch.id}`);
-    const elViews = document.getElementById(`stat-views-${ch.id}`);
-    const elRatio = document.getElementById(`stat-ratio-${ch.id}`);
-    const elBar = document.getElementById(`ratio-bar-${ch.id}`);
-    const elSpark = document.getElementById(`spark-${ch.id}`);
-    if (elSubs) elSubs.textContent = fmt(s.subs);
-    if (elLikes) elLikes.textContent = fmt(s.recentLikes);
-    if (elViews) elViews.textContent = fmt(s.totalViews10d);
-    if (elRatio) elRatio.textContent = ratio + '%';
-    if (elBar) elBar.style.width = Math.min(parseFloat(ratio), 100) + '%';
-    if (elSpark) elSpark.innerHTML = buildSparkline(s.viewHistory, ch.palette.bar);
+  const loaded = channels.filter(c=>!c.loading && c.liveData && c.isReal);
+  await Promise.all(loaded.map(async ch=>{
+    try {
+      const fresh = await fetchChannelData(ch.name);
+      ch.baseData = fresh; ch.liveData = {...fresh};
+      const s = ch.liveData;
+      const ratio = ((s.subs/(s.totalViews10d||1))*100).toFixed(1);
+      const lr = s.totalViews10d>0?((s.recentLikes/s.totalViews10d)*100).toFixed(2):'0.00';
+      const el = id=>document.getElementById(id+'-'+ch.id);
+      if(el('stat-subs')) el('stat-subs').textContent=fmt(s.subs);
+      if(el('stat-likes')) el('stat-likes').textContent=fmt(s.recentLikes);
+      if(el('stat-views')) el('stat-views').textContent=fmt(s.totalViews10d);
+      if(el('stat-lr')) el('stat-lr').textContent=lr+'%';
+      if(el('stat-ratio')) el('stat-ratio').textContent=ratio+'%';
+      if(el('ratio-bar')) el('ratio-bar').style.width=Math.min(parseFloat(ratio),100)+'%';
+      if(el('spark')) el('spark').innerHTML=buildSparkline(s.viewHistory,ch.palette.bar);
+    } catch(e){}
   }));
-
-  updateSummary();
+  updateSummary(); renderLeaderboard();
   btn.classList.remove('spinning');
   const now = new Date();
-  document.getElementById('lastUpdated').innerHTML =
-    `<span class="live-dot"></span>UPDATED ${now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'})}`;
+  document.getElementById('lastUpdated').innerHTML = '<span class="live-dot"></span>UPPDATERAD '+now.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
-// ─── Auto-refresh every 5 minutes for real data ───────────────────────────────
-setInterval(() => {
-  if (channels.filter(c => !c.loading).length > 0) refreshAll();
-}, 300000);
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('channelsView').style.display = tab==='channels'?'block':'none';
+  document.getElementById('rankingView').style.display = tab==='ranking'?'block':'none';
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(tab==='channels'&&i===0)||(tab==='ranking'&&i===1)));
+  if (tab==='ranking') renderLeaderboard();
+}
 
-// ─── Enter key support ────────────────────────────────────────────────────────
-document.getElementById('channelInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') addChannel();
-});
+// ─── Auto-refresh every 5 min ─────────────────────────────────────────────────
+setInterval(function(){if(channels.filter(c=>!c.loading).length>0)refreshAll();},300000);
+
+// ─── Enter key ────────────────────────────────────────────────────────────────
+document.getElementById('channelInput').addEventListener('keydown',function(e){if(e.key==='Enter')addChannel();});
 </script>
 </body>
 </html>
