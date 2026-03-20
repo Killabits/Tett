@@ -1107,24 +1107,39 @@ async function refreshAll() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
   const loaded = channels.filter(c=>!c.loading && c.liveData && c.isReal);
+
+  // Only refresh subscriber count (1 API unit per channel, no quota-heavy search)
+  // Video stats stay from initial load — they don't change minute-to-minute anyway
   await Promise.all(loaded.map(async ch=>{
     try {
-      const fresh = await fetchChannelData(ch.name);
-      ch.baseData = fresh; ch.liveData = {...fresh};
+      const key = YT_API_KEY;
+      const handle = ch.name.startsWith('@') ? ch.name : '@' + ch.name;
+      let res = await fetch('https://www.googleapis.com/youtube/v3/channels?part=statistics&forHandle='+encodeURIComponent(handle)+'&key='+key);
+      let data = await res.json();
+      if (!data.items || !data.items.length) {
+        // Try by stored channel name as-is (might be display name, use existing id)
+        return; // keep existing data if lookup fails
+      }
+      const newSubs = parseInt(data.items[0].statistics.subscriberCount || ch.liveData.subs);
+      ch.liveData.subs = newSubs;
+      ch.baseData.subs = newSubs;
+
+      // Update sub display only
+      const elSubs = document.getElementById('stat-subs-'+ch.id);
+      if (elSubs) elSubs.textContent = fmt(newSubs);
+
+      // Recalculate ratio with new sub count
       const s = ch.liveData;
       const ratio = ((s.subs/(s.totalViews10d||1))*100).toFixed(1);
-      const lr = s.totalViews10d>0?((s.recentLikes/s.totalViews10d)*100).toFixed(2):'0.00';
-      const el = id=>document.getElementById(id+'-'+ch.id);
-      if(el('stat-subs')) el('stat-subs').textContent=fmt(s.subs);
-      if(el('stat-likes')) el('stat-likes').textContent=fmt(s.recentLikes);
-      if(el('stat-views')) el('stat-views').textContent=fmt(s.totalViews10d);
-      if(el('stat-lr')) el('stat-lr').textContent=lr+'%';
-      if(el('stat-ratio')) el('stat-ratio').textContent=ratio+'%';
-      const rb=document.getElementById('ratio-bar-'+ch.id); if(rb) rb.style.width=Math.min(parseFloat(ratio),100)+'%';
-      if(el('spark')) el('spark').innerHTML=buildSparkline(s.viewHistory,ch.palette.bar);
-    } catch(e){}
+      const elRatio = document.getElementById('stat-ratio-'+ch.id);
+      if (elRatio) elRatio.textContent = ratio+'%';
+      const rb = document.getElementById('ratio-bar-'+ch.id);
+      if (rb) rb.style.width = Math.min(parseFloat(ratio),100)+'%';
+    } catch(e){} // silently keep existing data on any error
   }));
-  updateSummary(); renderLeaderboard();
+
+  updateSummary();
+  renderLeaderboard();
   btn.classList.remove('spinning');
   const now = new Date();
   document.getElementById('lastUpdated').textContent = 'Uppdaterad '+now.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -1138,8 +1153,7 @@ function switchTab(tab) {
   if (tab==='ranking') renderLeaderboard();
 }
 
-// ─── Auto-refresh every 5 min ─────────────────────────────────────────────────
-setInterval(function(){if(channels.filter(c=>!c.loading).length>0)refreshAll();},300000);
+// Auto-refresh disabled — use manual refresh button to save API quota
 
 // ─── Enter key ────────────────────────────────────────────────────────────────
 document.getElementById('channelInput').addEventListener('keydown',function(e){if(e.key==='Enter')addChannel();});
