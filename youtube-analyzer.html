@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* --- Din Originalstyling --- */
+/* --- Din Originalstyling + Justering för undertexter --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #080810; --s1: #0e0e1a; --s2: #13131f; --s3: #1c1c2e;
@@ -33,11 +33,13 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; position: relative
 
 /* Stats Strip / Winner Strip */
 .stats-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 28px; }
-.strip-cell { background: var(--s1); padding: 24px; min-height: 120px; transition: background 0.2s; }
+.strip-cell { background: var(--s1); padding: 20px 24px; min-height: 120px; transition: background 0.2s; }
 .strip-cell:hover { background: var(--s2); }
-.strip-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--text3); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
 
-/* Winner Content Styling */
+/* --- NY STYLING FÖR LABELS OCH SUBTEXT --- */
+.strip-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; }
+.strip-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.5rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; opacity: 0.7; }
+
 .winner-box { display: flex; align-items: center; gap: 12px; }
 .winner-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border2); }
 .winner-info { display: flex; flex-direction: column; }
@@ -58,6 +60,7 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; position: relative
 .stat { background: var(--s1); padding: 16px; }
 .stat-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
 .stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 600; }
+.stat-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.5rem; color: var(--text3); margin-top: 2px; }
 .score-row { display: flex; justify-content: space-between; padding: 12px 16px; background: var(--s2); border-top: 1px solid var(--border); font-family: 'Barlow Condensed', sans-serif; }
 .score-val { font-size: 1.3rem; font-weight: 700; color: var(--accent2); }
 #rankingView { display: none; }
@@ -89,18 +92,22 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px 40px; position: relative
   <div class="stats-strip" id="winnerStrip">
     <div class="strip-cell">
       <div class="strip-label">Mest visningar</div>
+      <div class="strip-sub">10 senaste videorna</div>
       <div id="win-views" class="winner-box"><div class="winner-val">—</div></div>
     </div>
     <div class="strip-cell">
       <div class="strip-label">Flest Likes</div>
+      <div class="strip-sub">10 senaste videorna</div>
       <div id="win-likes" class="winner-box"><div class="winner-val">—</div></div>
     </div>
     <div class="strip-cell">
       <div class="strip-label">Bäst Visn/Sub-Ratio</div>
+      <div class="strip-sub">10 senaste videorna</div>
       <div id="win-ratio" class="winner-box"><div class="winner-val">—</div></div>
     </div>
     <div class="strip-cell">
-      <div class="strip-label">Mest Aktiv (30d)</div>
+      <div class="strip-label">Mest Aktiv</div>
+      <div class="strip-sub">Senaste 30 dagarna</div>
       <div id="win-active" class="winner-box"><div class="winner-val">—</div></div>
     </div>
   </div>
@@ -142,7 +149,7 @@ async function fetchChannelData(handle) {
     if (Date.now() - ts < CACHE_MINS * 60 * 1000) return data;
   }
 
-  // 1. Kanalinfo (1 unit)
+  // 1. Kanalinfo
   const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${encodeURIComponent(handle)}&key=${YT_API_KEY}`);
   const data = await res.json();
   if (!data.items?.length) throw new Error('Ej hittad');
@@ -150,12 +157,23 @@ async function fetchChannelData(handle) {
   const ch = data.items[0];
   const uploadsId = ch.contentDetails.relatedPlaylists.uploads;
 
-  // 2. Senaste videos (1 unit)
-  const pRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${uploadsId}&maxResults=10&key=${YT_API_KEY}`);
+  // 2. Senaste videos med "snippet" för att hämta datum (kostar bara en extra enhet, totalt 2)
+  const pRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,snippet&playlistId=${uploadsId}&maxResults=10&key=${YT_API_KEY}`);
   const pData = await pRes.json();
-  const vIds = pData.items.map(i => i.contentDetails.videoId).join(',');
+  
+  // Beräkna "Mest aktiv de senaste 30 dagarna"
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  
+  let activeIn30d = 0;
+  const vIds = pData.items.map(i => {
+    if (new Date(i.snippet.publishedAt) >= thirtyDaysAgo) {
+      activeIn30d++;
+    }
+    return i.contentDetails.videoId;
+  }).join(',');
 
-  // 3. Stats (1 unit)
+  // 3. Stats 
   const vRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${vIds}&key=${YT_API_KEY}`);
   const vData = await vRes.json();
 
@@ -166,26 +184,32 @@ async function fetchChannelData(handle) {
     subs: parseInt(ch.statistics.subscriberCount || 0),
     views: history.reduce((a,b) => a+b, 0),
     likes: vData.items.reduce((s,v) => s + parseInt(v.statistics.likeCount || 0), 0),
-    activeCount: vData.items.length // I detta exempel kollar vi de 10 senaste
+    activeCount: activeIn30d // Nu mäter den genuint de senaste 30 dagarna!
   };
 
   localStorage.setItem(cacheKey, JSON.stringify({ data: result, ts: Date.now() }));
   return result;
 }
 
-// Relativ poängberäkning (Engagement vs Subs)
+// Relativ poängberäkning
 function calculateScore(c) {
   if (!c.views || !c.subs) return 0;
-  const viewRatio = (c.views / c.activeCount) / c.subs;
+  
+  // Säkra mot division med 0 om activeCount är 0 (dvs inga videos sista 30d)
+  const validActiveCount = Math.max(c.activeCount, 1);
+  
+  const viewRatio = (c.views / validActiveCount) / c.subs;
   const viewScore = Math.min((viewRatio / 0.5) * 40, 40);
+  
   const likeRatio = c.likes / c.views;
   const likeScore = Math.min((likeRatio / 0.1) * 60, 60);
+  
   return Math.round(viewScore + likeScore);
 }
 
 async function loadApp() {
   const grid = document.getElementById('channelsGrid');
-  grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:var(--text3)">Laddar monitorering...</div>';
+  grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:var(--text3)">Ansluter till YouTube Data API...</div>';
   
   channels = [];
   const promises = TARGET_CHANNELS.map(async (handle) => {
@@ -200,30 +224,46 @@ async function loadApp() {
 }
 
 function renderAll() {
-  // 1. Rendera grid
   const grid = document.getElementById('channelsGrid');
   grid.innerHTML = channels.map(c => {
-    const ratio = ((c.views / c.activeCount) / c.subs * 100).toFixed(1);
+    const validActiveCount = Math.max(c.activeCount, 1);
+    const ratio = ((c.views / validActiveCount) / c.subs * 100).toFixed(1);
+    const likeRate = ((c.likes / Math.max(c.views, 1)) * 100).toFixed(2);
+    
     return `
       <div class="ch-card">
         <div class="ch-card-header">
           <img src="${c.avatar}" class="ch-avatar">
           <div class="ch-name">${c.name}</div>
+          <div class="ch-status">LIVE</div>
         </div>
         <div class="ch-stats">
-          <div class="stat"><div class="stat-lbl">Subs</div><div class="stat-num">${fmt(c.subs)}</div></div>
-          <div class="stat"><div class="stat-lbl">Visn (10v)</div><div class="stat-num">${fmt(c.views)}</div></div>
-          <div class="stat"><div class="stat-lbl">Likes</div><div class="stat-num" style="color:var(--cyan)">${fmt(c.likes)}</div></div>
-          <div class="stat"><div class="stat-lbl">Visn/Sub</div><div class="stat-num" style="color:var(--gold)">${ratio}%</div></div>
+          <div class="stat">
+            <div class="stat-lbl">Subs</div>
+            <div class="stat-num">${fmt(c.subs)}</div>
+            <div class="stat-sub">Totalt</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">Visningar</div>
+            <div class="stat-num">${fmt(c.views)}</div>
+            <div class="stat-sub">(10 senaste)</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">Gillningsgrad</div>
+            <div class="stat-num" style="color:var(--cyan)">${likeRate}%</div>
+            <div class="stat-sub">Likes per visning</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">Visn/Sub</div>
+            <div class="stat-num" style="color:var(--gold)">${ratio}%</div>
+            <div class="stat-sub">Räckvidd</div>
+          </div>
         </div>
         <div class="score-row"><span>Performance Score</span><span class="score-val">${calculateScore(c)} / 100</span></div>
       </div>`;
   }).join('');
 
-  // 2. Uppdatera Winner Strip
   updateWinners();
-  
-  // 3. Rendera Ranking
   renderRanking();
 }
 
@@ -239,19 +279,27 @@ function updateWinners() {
       </div>`;
   };
 
-  // Kategorier
+  // 1. Mest visningar
   const topViews = [...channels].sort((a,b) => b.views - a.views)[0];
   winUI('win-views', topViews, fmt(topViews.views), 'var(--cyan)');
 
+  // 2. Flest Likes
   const topLikes = [...channels].sort((a,b) => b.likes - a.likes)[0];
   winUI('win-likes', topLikes, fmt(topLikes.likes), 'var(--accent2)');
 
-  const topRatio = [...channels].sort((a,b) => ((b.views/b.activeCount)/b.subs) - ((a.views/a.activeCount)/a.subs))[0];
-  const ratioVal = ((topRatio.views / topRatio.activeCount) / topRatio.subs * 100).toFixed(1) + '%';
+  // 3. Bäst räckvidd/ratio
+  const topRatio = [...channels].sort((a,b) => {
+    const aCount = Math.max(a.activeCount, 1);
+    const bCount = Math.max(b.activeCount, 1);
+    return ((b.views/bCount)/b.subs) - ((a.views/aCount)/a.subs);
+  })[0];
+  const tCount = Math.max(topRatio.activeCount, 1);
+  const ratioVal = ((topRatio.views / tCount) / topRatio.subs * 100).toFixed(1) + '%';
   winUI('win-ratio', topRatio, ratioVal, 'var(--gold)');
 
+  // 4. Mest aktiv
   const topActive = [...channels].sort((a,b) => b.activeCount - a.activeCount)[0];
-  winUI('win-active', topActive, topActive.activeCount + ' videos', 'var(--green)');
+  winUI('win-active', topActive, topActive.activeCount + ' videor', 'var(--green)');
 }
 
 function renderRanking() {
